@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true)]
 pub struct Cli {
@@ -8,7 +8,7 @@ pub struct Cli {
     pub show_commands: ShowCommands,
 }
 
-#[derive(Subcommand)]
+#[derive(Subcommand, Debug)]
 pub enum ShowCommands {
     /// Show title for jira card
     Title { code: usize },
