@@ -4,6 +4,7 @@ pub struct JiraConfig {
     pub card_prefix: String,
     pub user_mail: String,
     pub user_token: String,
+    pub profile_id: String,
 }
 
 impl JiraConfig {
@@ -15,6 +16,8 @@ impl JiraConfig {
             user_mail: std::env::var("JIRA_USER").expect("JIRA_USER environment must be defined"),
             user_token: std::env::var("JIRA_TOKEN")
                 .expect("JIRA_TOKEN environment must be defined"),
+            profile_id: std::env::var("JIRA_PROFILE_ID")
+                .expect("JIRA_PROFILE_ID environment must be defined"),
         }
     }
 }

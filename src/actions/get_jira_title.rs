@@ -20,10 +20,10 @@ pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
         config.url_prefix, config.card_prefix, code
     );
 
-    let credentials = Credentials::new(&config.user_mail, &config.user_token);
+    let basic_auth = Credentials::new(&config.user_mail, &config.user_token).as_http_header();
 
     let body = minreq::get(&url)
-        .with_header("Authorization", credentials.as_http_header())
+        .with_header("Authorization", basic_auth)
         .send()?
         .json::<Issue>()?;
 

@@ -1,2 +1,2 @@
 pub mod cli;
-pub mod show_cmd_parser;
+pub mod cmd_parser;
