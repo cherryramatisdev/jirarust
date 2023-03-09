@@ -30,7 +30,9 @@ struct AssigneeBody {
 
 impl AssigneeBody {
     fn new(profile_id: &String) -> Self {
-        Self { account_id: profile_id.to_string() }
+        Self {
+            account_id: profile_id.to_string(),
+        }
     }
 }
 
@@ -43,7 +45,10 @@ pub fn call(code: &usize) -> Result<bool, Box<dyn std::error::Error>> {
         "{}/rest/api/2/issue/{}-{}/transitions",
         config.url_prefix, config.card_prefix, code
     ))
-    .with_header("Authorization", Credentials::new(&config.user_mail, &config.user_token).as_http_header())
+    .with_header(
+        "Authorization",
+        Credentials::new(&config.user_mail, &config.user_token).as_http_header(),
+    )
     .with_json(&transition_body)?
     .send()?;
 
@@ -52,7 +57,10 @@ pub fn call(code: &usize) -> Result<bool, Box<dyn std::error::Error>> {
         "{}/rest/api/2/issue/{}-{}/assignee",
         config.url_prefix, config.card_prefix, code
     ))
-    .with_header("Authorization", Credentials::new(&config.user_mail, &config.user_token).as_http_header())
+    .with_header(
+        "Authorization",
+        Credentials::new(&config.user_mail, &config.user_token).as_http_header(),
+    )
     .with_json(&assignee_body)?
     .send()?;
 
