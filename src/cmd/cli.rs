@@ -18,4 +18,7 @@ pub enum Commands {
 
     /// Move card to progress and create new git branch
     Progress { code: usize },
+
+    /// Move card to review and create new pull request
+    Review { code: usize },
 }

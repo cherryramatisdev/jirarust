@@ -15,6 +15,7 @@ struct Field {
 
 pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
     let config = JiraConfig::new();
+
     let url = format!(
         "{}/rest/api/2/issue/{}-{}",
         config.url_prefix, config.card_prefix, code

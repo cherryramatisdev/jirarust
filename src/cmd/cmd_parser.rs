@@ -15,9 +15,10 @@ pub fn parse_commands(cli: &Cli) {
             };
         }
         Commands::Progress { code } => {
-            if let Ok(true) = progress_card::call(code) {
-                print!("Moved successfully");
-            };
+            progress_card::call(code).unwrap();
+        }
+        Commands::Review { code } => {
+            progress_card::call(code).unwrap();
         }
     }
 }
