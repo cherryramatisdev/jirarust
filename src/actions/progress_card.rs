@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::actions;
-use crate::api;
-
-use super::transitions::Transitions;
+use crate::jira_api;
+use super::transitions::TRANSITIONS;
 
 #[derive(Deserialize, Serialize)]
 struct Transition {
@@ -11,7 +10,7 @@ struct Transition {
 }
 
 pub fn call(code: &usize) -> Result<bool, Box<dyn std::error::Error>> {
-    let transition_response = api::move_card_status::call(code, &Transitions::new().progress)?;
+    let transition_response = jira_api::move_card_status::call(code, &TRANSITIONS.progress)?;
 
     let assignee_response = actions::assignee_card::call(code).unwrap();
 
