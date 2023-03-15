@@ -1,5 +1,5 @@
 use http_auth_basic::Credentials;
-use crate::actions::get_jira_config::JiraConfig;
+use crate::jira_api::get_config::JiraConfig;
 use minreq::Response;
 use serde::{Deserialize, Serialize};
 

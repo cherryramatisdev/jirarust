@@ -1,4 +1,4 @@
-use super::get_jira_config::JiraConfig;
+use crate::jira_api::get_config::JiraConfig;
 
 pub fn call(code: &usize) -> Result<bool, Box<dyn std::error::Error>> {
     let config = JiraConfig::new();
