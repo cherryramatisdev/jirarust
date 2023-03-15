@@ -1,6 +1,6 @@
 mod actions;
 mod cmd;
-mod api;
+mod jira_api;
 
 use std::error;
 

@@ -1,4 +1,4 @@
-use crate::actions::{get_jira_pr_title, get_jira_title, progress_card};
+use crate::actions::{get_jira_pr_title, get_jira_title, progress_card, review_card};
 
 use super::cli::{Cli, Commands};
 
@@ -18,7 +18,7 @@ pub fn parse_commands(cli: &Cli) {
             progress_card::call(code).unwrap();
         }
         Commands::Review { code } => {
-            progress_card::call(code).unwrap();
+            review_card::call(code).unwrap();
         }
     }
 }
