@@ -4,8 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+ansi-hex-color = "0.1.1"
 clap = { version = "4.1.8", features = ["derive"] }
 http-auth-basic = "0.3.3"
 minreq = { version = "2.6.0", features = ["punycode", "https", "json-using-serde"] }
+regex = "1.7.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
