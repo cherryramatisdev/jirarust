@@ -1,6 +1,9 @@
-use crate::jira_api;
+use crate::{jira_api, utils};
 use ansi_hex_color;
 use regex::Regex;
+
+const FOREGROUND_LIGHT: &str = "#ffffff";
+const FOREGROUND_DARK: &str = "#000000";
 
 pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
     let content = jira_api::get_card_content::call(code)?;
@@ -20,10 +23,14 @@ pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
             .replace("{panel}", "")
             .replace(box_colored, "");
 
+        let foreground_color = match utils::color_dark_or_bright::call(color) {
+            utils::color_dark_or_bright::ColorState::Darker => FOREGROUND_LIGHT,
+            utils::color_dark_or_bright::ColorState::Brighter => FOREGROUND_DARK,
+        };
+
         return Ok(format!(
             "{}{content}",
-            // TODO: check if `color` is too bright or too dark and decide foreground color.
-            ansi_hex_color::colored("", color, &box_colored)
+            ansi_hex_color::colored(foreground_color, color, &box_colored)
         ));
     }
 
