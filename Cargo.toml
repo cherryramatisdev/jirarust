@@ -8,6 +8,7 @@ ansi-hex-color = "0.1.1"
 atty = "0.2.14"
 clap = { version = "4.1.8", features = ["derive"] }
 colors-transform = "0.2.11"
+dialoguer = "0.10.3"
 http-auth-basic = "0.3.3"
 minreq = { version = "2.6.0", features = ["punycode", "https", "json-using-serde"] }
 regex = "1.7.1"
