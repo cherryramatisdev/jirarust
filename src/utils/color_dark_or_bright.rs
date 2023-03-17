@@ -5,7 +5,7 @@ pub enum ColorState {
     Darker,
 }
 
-pub fn call(hex_color: &str) -> ColorState {
+pub fn call(hex_color: &String) -> ColorState {
     let result = Rgb::from_hex_str(hex_color).unwrap();
 
     let (red, green, blue) = (
