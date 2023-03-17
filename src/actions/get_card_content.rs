@@ -15,12 +15,12 @@ pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
         return Ok(content);
     }
 
-    return Ok(content);
+    Ok(content)
 }
 
-fn capture_group_as_str(regex: &str, group_location: usize, content: &String) -> String {
+fn capture_group_as_str(regex: &str, group_location: usize, content: &str) -> String {
     let re = Regex::new(regex).unwrap();
-    let groups = re.captures(content.as_str()).unwrap();
+    let groups = re.captures(content).unwrap();
     return groups.get(group_location).unwrap().as_str().to_string();
 }
 
@@ -39,9 +39,8 @@ fn colorize_content(content: String) -> String {
         .replace("{panel}", "")
         .replace(
             box_colored.as_str(),
-            &ansi_hex_color::colored(foreground_color, &color.as_str(), &box_colored.trim())
-                .as_str(),
+            ansi_hex_color::colored(foreground_color, color.as_str(), box_colored.trim()).as_str(),
         );
 
-    return content;
+    content
 }
