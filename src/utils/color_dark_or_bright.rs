@@ -5,7 +5,7 @@ pub enum ColorState {
     Darker,
 }
 
-pub fn call(hex_color: &String) -> ColorState {
+pub fn call(hex_color: &str) -> ColorState {
     let result = Rgb::from_hex_str(hex_color).unwrap();
 
     let (red, green, blue) = (
@@ -14,10 +14,10 @@ pub fn call(hex_color: &String) -> ColorState {
         result.get_blue() as usize,
     );
 
-    return match is_color_lighter_or_darker(red, green, blue) {
+    match is_color_lighter_or_darker(red, green, blue) {
         true => ColorState::Brighter,
         _ => ColorState::Darker,
-    };
+    }
 }
 
 fn is_color_lighter_or_darker(r: usize, g: usize, b: usize) -> bool {
