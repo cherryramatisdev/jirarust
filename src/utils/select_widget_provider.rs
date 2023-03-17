@@ -7,7 +7,10 @@ pub fn call(items: Vec<&str>) -> Result<String, Box<dyn std::error::Error>> {
         .interact_on_opt(&Term::stderr())?;
 
     match selection {
-       Some(index) => Ok(items[index].to_string()), 
-       None => Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "No item selected")))?
+        Some(index) => Ok(items[index].to_string()),
+        None => Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "No item selected",
+        )))?,
     }
 }
