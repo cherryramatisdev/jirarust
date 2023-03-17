@@ -5,8 +5,8 @@ description = "A command-line utility for bringing Jira and Github together"
 homepage = "https://github.com/cherryramatisdev/jirarust"
 license = "MIT/Apache-2.0"
 name = "jirarust"
-repository = "https://github.com/sharkdp/bat"
-version = "0.1.1"
+repository = "https://github.com/cherryramatisdev/jirarust"
+version = "0.1.2"
 edition = '2021'
 
 [dependencies]
