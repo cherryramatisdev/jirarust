@@ -1,16 +1,17 @@
-use http_auth_basic::Credentials;
+use crate::jira_api::get_config::JiraConfig;
+
 use serde::Deserialize;
 
-use super::get_jira_config::JiraConfig;
+use http_auth_basic::Credentials;
 
-#[derive(Deserialize)]
-struct Issue {
-    fields: Field,
+#[derive(Debug, Deserialize)]
+struct Field {
+    description: String,
 }
 
-#[derive(Deserialize)]
-struct Field {
-    summary: String,
+#[derive(Debug, Deserialize)]
+struct Issue {
+    fields: Field,
 }
 
 pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
@@ -28,5 +29,5 @@ pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
         .send()?
         .json::<Issue>()?;
 
-    return Ok(body.fields.summary);
+    return Ok(body.fields.description);
 }

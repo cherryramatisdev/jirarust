@@ -1,5 +1,5 @@
+use crate::jira_api::get_config::JiraConfig;
 use http_auth_basic::Credentials;
-use crate::actions::get_jira_config::JiraConfig;
 use minreq::Response;
 use serde::{Deserialize, Serialize};
 
@@ -41,7 +41,7 @@ pub fn call(code: &usize, transition: &usize) -> Result<Response, Box<dyn error:
     .send()?;
 
     if transition_response.status_code == 204 {
-        Ok(transition_response) 
+        Ok(transition_response)
     } else {
         Err("Error while doing transition".into())
     }

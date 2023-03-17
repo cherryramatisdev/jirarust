@@ -1,7 +1,7 @@
 use http_auth_basic::Credentials;
 use serde::{Deserialize, Serialize};
 
-use super::get_jira_config::JiraConfig;
+use crate::jira_api::get_config::JiraConfig;
 
 #[derive(Deserialize, Serialize)]
 struct AssigneeBody {

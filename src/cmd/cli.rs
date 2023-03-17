@@ -21,4 +21,7 @@ pub enum Commands {
 
     /// Move card to review and create new pull request
     Review { code: usize },
+
+    /// Print card description on stdout
+    View { code: usize },
 }
