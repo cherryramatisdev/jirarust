@@ -1,11 +1,10 @@
-use crate::jira_api::transitions::TRANSITIONS;
 use crate::git_api;
+use crate::jira_api::transitions::TRANSITIONS;
 use crate::{actions, jira_api};
 use std::error;
 
 pub fn call(code: &usize) -> Result<bool, Box<dyn error::Error>> {
-    let transition_response =
-        jira_api::move_card_status::call(code, &TRANSITIONS.review).unwrap();
+    let transition_response = jira_api::move_card_status::call(code, &TRANSITIONS.review).unwrap();
     let branches = git_api::list_branches::call().unwrap();
     let has_develop = branches.iter().any(|s| s == "develop");
     let pr_title = actions::get_pr_title::call(code).unwrap();

@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::actions;
-use crate::jira_api;
 use crate::git_api;
+use crate::jira_api;
 use crate::jira_api::transitions::TRANSITIONS;
 
 #[derive(Deserialize, Serialize)]

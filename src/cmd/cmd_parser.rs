@@ -1,8 +1,9 @@
-use crate::actions::{get_pr_title, get_card_title, progress_card, review_card, get_card_content};
+use crate::actions::{get_card_content, get_card_title, get_pr_title, progress_card, review_card};
 
 use super::cli::{Cli, Commands};
 
-pub fn parse_commands(cli: &Cli) { match &cli.commands {
+pub fn parse_commands(cli: &Cli) {
+    match &cli.commands {
         Commands::Title { code } => {
             if let Ok(title) = get_card_title::call(code) {
                 print!("{title}");
