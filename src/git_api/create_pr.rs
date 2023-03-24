@@ -1,3 +1,4 @@
+use crate::git_api;
 use std::process::ExitStatus;
 use std::process::Stdio;
 
@@ -5,7 +6,11 @@ pub fn call(base_branch: &String, pr_title: &String) -> ExitStatus {
     let reviewers = std::env::var("REVIEWERS").unwrap();
     let mut cmd = std::process::Command::new("gh");
 
-    let branch_type = base_branch.split('/').collect::<Vec<&str>>()[0];
+    let commander = git_api::get_current_branch::GetCurrentBranchCommand;
+
+    let current_branch = git_api::get_current_branch::call(&commander).unwrap();
+
+    let branch_type = current_branch.split('/').collect::<Vec<&str>>()[0];
 
     cmd.arg("pr")
         .arg("-a")
