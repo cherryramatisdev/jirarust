@@ -1,14 +1,9 @@
 use std::{error::Error, process::Command, process::Output};
 
-// TODO: refactor this into a new file.
-#[cfg_attr(test, mockall::automock)]
-pub trait Commander {
-    fn output(&self) -> Result<Output, std::io::Error>;
-}
+use super::command_trait;
 
 pub struct GetCurrentBranchCommand;
-
-impl Commander for GetCurrentBranchCommand {
+impl command_trait::Command for GetCurrentBranchCommand {
     fn output(&self) -> Result<Output, std::io::Error> {
         Command::new("git")
             .arg("rev-parse")
@@ -18,9 +13,16 @@ impl Commander for GetCurrentBranchCommand {
     }
 }
 
-pub fn call(cmd: &impl Commander) -> Result<String, Box<dyn Error>> {
+pub fn call(cmd: &impl command_trait::Command) -> Result<String, Box<dyn Error>> {
     if let Ok(output) = cmd.output() {
         let current_branch = String::from_utf8(output.stdout)?;
+
+        if current_branch.is_empty() {
+            return Err(Box::new(std::io::Error::new(
+                        std::io::ErrorKind::Other,
+                        "Try to run the same command in a git repository or run `git init` in your current directory",
+                        )));
+        }
 
         return Ok(current_branch);
     }
@@ -38,7 +40,7 @@ mod tests {
 
     #[test]
     fn return_current_branch_if_available_test() {
-        let mut mock_command = MockCommander::new();
+        let mut mock_command = command_trait::MockCommand::new();
         mock_command.expect_output().return_once(|| {
             Ok(Output {
                 status: std::os::unix::process::ExitStatusExt::from_raw(0),
@@ -52,7 +54,7 @@ mod tests {
 
     #[test]
     fn return_error_if_not_available_test() {
-        let mut mock_command = MockCommander::new();
+        let mut mock_command = command_trait::MockCommand::new();
         mock_command.expect_output().return_once(|| {
             Err(std::io::Error::new(
                 std::io::ErrorKind::Other,
