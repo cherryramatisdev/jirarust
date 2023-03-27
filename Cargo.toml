@@ -6,7 +6,7 @@ homepage = "https://github.com/cherryramatisdev/jirarust"
 license = "MIT/Apache-2.0"
 name = "jirarust"
 repository = "https://github.com/cherryramatisdev/jirarust"
-version = "0.1.3"
+version = "0.2.0"
 edition = '2021'
 
 [dependencies]
