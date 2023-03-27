@@ -34,7 +34,7 @@ pub fn call(base_branch: &String, pr_title: &String) -> ExitStatus {
 fn get_label_per_branch_type(branch_type: &str) -> String {
     match branch_type {
         "feature" => "enhancement".to_string(),
-        "fix" => "bugfix".to_string(),
+        "fix" => "bug".to_string(),
         _ => "".to_string(),
     }
 }
