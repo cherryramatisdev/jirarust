@@ -1,4 +1,6 @@
+use crate::log::{log, LogType, Message};
 use std::fs;
+use std::path::Path;
 
 use serde::Deserialize;
 
@@ -32,16 +34,31 @@ pub fn call() -> Result<Config, serde_json::Error> {
     let home_dir = std::env::var("HOME").unwrap();
     let config_loc =
         std::env::var("JIRA_CONFIG_LOG").unwrap_or(format!("{}/.jira_config.json", home_dir));
-    let data = fs::read_to_string(&config_loc).expect("Failed to read config file");
+
+    let config_path = Path::new(&config_loc);
+
+    if !config_path.exists() {
+        match fs::File::create(config_path) {
+            Ok(_) => (),
+            Err(e) => {
+                log(LogType::Error, Message::Error(Box::new(e)));
+            }
+        };
+    }
+
+    let data = match fs::read_to_string(&config_loc) {
+        Ok(data) => data,
+        Err(e) => {
+            log(LogType::Error, Message::Error(Box::new(e)));
+
+            "".to_string()
+        }
+    };
 
     match serde_json::from_str(&data) {
         Ok(config) => Ok(config),
         Err(e) => {
-            println!(
-                "{} {}",
-                ansi_hex_color::colored("#ffffff", "#ff0000", "ERROR"),
-                e
-            );
+            log(LogType::Error, Message::SerdeError(&e));
 
             Err(e)
         }
