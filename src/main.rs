@@ -3,6 +3,7 @@ mod cmd;
 mod config;
 mod git_api;
 mod jira_api;
+mod log;
 mod utils;
 
 use std::error;
