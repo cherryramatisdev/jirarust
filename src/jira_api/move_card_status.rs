@@ -1,4 +1,4 @@
-use crate::jira_api::get_config::JiraConfig;
+use crate::config;
 use http_auth_basic::Credentials;
 use minreq::Response;
 use serde::{Deserialize, Serialize};
@@ -26,16 +26,16 @@ impl TransitionBody {
 }
 
 pub fn call(code: &usize, transition: &usize) -> Result<Response, Box<dyn error::Error>> {
-    let config = JiraConfig::new();
+    let config = config::config_parser::call()?;
     let transition_body = TransitionBody::new(transition);
 
     let transition_response = minreq::post(format!(
         "{}/rest/api/2/issue/{}-{}/transitions",
-        config.url_prefix, config.card_prefix, code
+        config.prefixes.url_prefix, config.prefixes.card_prefix, code
     ))
     .with_header(
         "Authorization",
-        Credentials::new(&config.user_mail, &config.user_token).as_http_header(),
+        Credentials::new(&config.auth.user_mail, &config.auth.user_token).as_http_header(),
     )
     .with_json(&transition_body)?
     .send()?;

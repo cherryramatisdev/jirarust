@@ -1,4 +1,4 @@
-use crate::jira_api::get_config::JiraConfig;
+use crate::config;
 
 use serde::Deserialize;
 
@@ -15,14 +15,15 @@ struct Issue {
 }
 
 pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
-    let config = JiraConfig::new();
+    let config = config::config_parser::call()?;
 
     let url = format!(
         "{}/rest/api/2/issue/{}-{}",
-        config.url_prefix, config.card_prefix, code
+        config.prefixes.url_prefix, config.prefixes.card_prefix, code
     );
 
-    let basic_auth = Credentials::new(&config.user_mail, &config.user_token).as_http_header();
+    let basic_auth =
+        Credentials::new(&config.auth.user_mail, &config.auth.user_token).as_http_header();
 
     let body = minreq::get(url)
         .with_header("Authorization", basic_auth)

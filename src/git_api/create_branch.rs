@@ -1,4 +1,4 @@
-use crate::jira_api::get_config::JiraConfig;
+use crate::config;
 
 use super::command_trait::Command;
 
@@ -8,10 +8,10 @@ pub struct CreateBranchCommand {
 
 impl CreateBranchCommand {
     pub fn new(branch_type: &str, code: &usize) -> Self {
-        let config = JiraConfig::new();
+        let config = config::config_parser::call().unwrap();
 
         Self {
-            branch_name: format!("{}/{}-{}", branch_type, config.card_prefix, code),
+            branch_name: format!("{}/{}-{}", branch_type, config.prefixes.card_prefix, code),
         }
     }
 }

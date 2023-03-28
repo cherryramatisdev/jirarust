@@ -1,9 +1,12 @@
 use super::get_card_title;
-use crate::jira_api::get_config::JiraConfig;
+use crate::config;
 
 pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
-    let config = JiraConfig::new();
+    let config = config::config_parser::call()?;
     let title = get_card_title::call(code)?;
 
-    Ok(format!("[{}-{}]: {}", config.card_prefix, code, title))
+    Ok(format!(
+        "[{}-{}]: {}",
+        config.prefixes.card_prefix, code, title
+    ))
 }

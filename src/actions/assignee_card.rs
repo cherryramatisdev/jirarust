@@ -1,7 +1,7 @@
 use http_auth_basic::Credentials;
 use serde::{Deserialize, Serialize};
 
-use crate::jira_api::get_config::JiraConfig;
+use crate::config;
 
 #[derive(Deserialize, Serialize)]
 struct AssigneeBody {
@@ -18,16 +18,16 @@ impl AssigneeBody {
 }
 
 pub fn call(code: &usize) -> Result<minreq::Response, Box<dyn std::error::Error>> {
-    let config = JiraConfig::new();
-    let assignee_body = AssigneeBody::new(&config.profile_id);
+    let config = config::config_parser::call()?;
+    let assignee_body = AssigneeBody::new(&config.auth.profile_id);
 
     let assignee_response = minreq::put(format!(
         "{}/rest/api/2/issue/{}-{}/assignee",
-        config.url_prefix, config.card_prefix, code
+        config.prefixes.url_prefix, config.prefixes.card_prefix, code
     ))
     .with_header(
         "Authorization",
-        Credentials::new(&config.user_mail, &config.user_token).as_http_header(),
+        Credentials::new(&config.auth.user_mail, &config.auth.user_token).as_http_header(),
     )
     .with_json(&assignee_body)?
     .send()?;

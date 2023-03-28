@@ -1,3 +1,4 @@
+use crate::config;
 use crate::git_api;
 use std::process::ExitStatus;
 use std::process::Stdio;
@@ -32,9 +33,10 @@ pub fn call(base_branch: &String, pr_title: &String) -> ExitStatus {
 }
 
 fn get_label_per_branch_type(branch_type: &str) -> String {
+    let config = config::config_parser::call().unwrap();
     match branch_type {
-        "feature" => "enhancement".to_string(),
-        "fix" => "bug".to_string(),
+        "feature" => config.git.feature_tag,
+        "fix" => config.git.fix_tag,
         _ => "".to_string(),
     }
 }
