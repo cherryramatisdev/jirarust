@@ -1,5 +1,6 @@
 use crate::git_api;
 use crate::jira_api::transitions::TRANSITIONS;
+use crate::log::{log, LogType, Message};
 use crate::{actions, jira_api};
 use std::error;
 
@@ -18,7 +19,7 @@ pub fn call(code: &usize) -> Result<bool, Box<dyn error::Error>> {
             git_api::view_current_pr::call()?;
         }
 
-        print!("{}", status);
+        log(LogType::Info, Message::String(format!("{}", status)));
     }
 
     Ok(true)
