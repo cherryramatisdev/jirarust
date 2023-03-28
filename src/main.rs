@@ -1,5 +1,6 @@
 mod actions;
 mod cmd;
+mod config;
 mod git_api;
 mod jira_api;
 mod utils;
