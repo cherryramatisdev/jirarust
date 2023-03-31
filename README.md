@@ -10,14 +10,26 @@ A cli that group jira and github together in a beatiful workflow 🦄.
 cargo install jirarust
 ```
 
-2. Add the necessary information as environment variable to your `.zshrc` or `.bashrc`.
+2. Add the required configuration under `~/.jira_config.json`
+> DISCLAIMER: You can use the env var `JIRA_CONFIG_LOG` to change the config file location.
 
-```sh
-export JIRA_TOKEN="<your personal access token>"
-export JIRA_USER="<the email you use on your account>"
-export JIRA_URL="<the url of your jira instance>"
-export JIRA_CARD_PREFIX="<the prefix of your jira cards (normally depend on your board like TEC-xxx)>"
-export JIRA_PROFILE_ID="<The id for your profile>"
+The json file should look like this:
+```json
+{
+  "auth": {
+    "user_mail": "<the email you use on your account>",
+    "user_token": "<your personal access token>",
+    "profile_id": "<the id for your profile>"
+  },
+  "prefixes": {
+    "card_prefix": "<the prefix of your jira cards (normally depend on your board like TEC-xxx)>",
+    "url_prefix": "<the url of your jira instance>"
+  },
+  "git": {
+    "feature_tag": "<the github label you use for features>",
+    "fix_tag": "<the github label you use for bugfixes>",
+  }
+}
 ```
 
 3. Just run and be happy 🎉
@@ -36,7 +48,7 @@ jirarust
 
 - [ ] Fix build github action to release pre built binaries for different platforms
 - [ ] Add tests
-- [ ] Add documentation
+- [X] Add documentation
 - [X] Add commands to view description of a card
 - [ ] Add commands to move through other columns like (homol, done, etc)
 - [ ] Make transition object less personal(today the number only works for my jira board I think)
