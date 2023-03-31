@@ -2,25 +2,27 @@ use crate::config;
 
 use super::command_trait::Command;
 
-pub struct CreateBranchCommand {
+pub struct ChangeToBranchCommand {
     branch_name: String,
+    should_create: bool,
 }
 
-impl CreateBranchCommand {
-    pub fn new(branch_type: &str, code: &usize) -> Self {
+impl ChangeToBranchCommand {
+    pub fn new(branch_type: &str, code: &usize, should_create: bool) -> Self {
         let config = config::config_parser::call().unwrap();
 
         Self {
             branch_name: format!("{}/{}-{}", branch_type, config.prefixes.card_prefix, code),
+            should_create,
         }
     }
 }
 
-impl Command for CreateBranchCommand {
+impl Command for ChangeToBranchCommand {
     fn output(&self) -> Result<std::process::Output, std::io::Error> {
         std::process::Command::new("git")
             .arg("checkout")
-            .arg("-b")
+            .arg(if self.should_create { "-b" } else { "" })
             .arg(self.branch_name.as_str())
             .output()
     }
