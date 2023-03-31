@@ -13,7 +13,10 @@ impl command_trait::Command for GetBranchesCommand {
     }
 }
 
-pub fn call(cmd: &impl command_trait::Command, branch_name: &str) -> Result<bool, Box<dyn std::error::Error>> {
+pub fn call(
+    cmd: &impl command_trait::Command,
+    branch_name: &str,
+) -> Result<bool, Box<dyn std::error::Error>> {
     if let Ok(branches) = cmd.output() {
         let branches = String::from_utf8(branches.stdout)?;
         let branches = branches.trim().split("\n").collect::<Vec<&str>>();
