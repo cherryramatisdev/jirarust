@@ -13,7 +13,7 @@ struct Transition {
 
 pub fn call(branch_type: &str, code: &usize) -> Result<bool, Box<dyn std::error::Error>> {
     let config = config::config_parser::call()?;
-    let branch_exist = git_api::branch_exist::call(
+    let (branch_exist, _) = git_api::branch_exist::call(
         &git_api::branch_exist::GetBranchesCommand,
         &format!("{}/{}-{}", branch_type, config.prefixes.card_prefix, code).as_str(),
     )?;
@@ -27,7 +27,7 @@ pub fn call(branch_type: &str, code: &usize) -> Result<bool, Box<dyn std::error:
     )
     .unwrap();
 
-    return Ok(transition_response.status_code == 200
+    Ok(transition_response.status_code == 200
         && assignee_response.status_code == 200
-        && branch_response);
+        && branch_response)
 }
