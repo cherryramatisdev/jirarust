@@ -15,10 +15,10 @@ pub fn call(
 ) -> Result<(bool, String), Box<dyn std::error::Error>> {
     if let Ok(branches) = cmd.output() {
         let branches = String::from_utf8(branches.stdout)?;
-        let branches = branches.replace("*", "");
+        let branches = branches.replace('*', "");
         let branches = branches
             .trim()
-            .split("\n")
+            .split('\n')
             .map(|x| x.trim())
             .collect::<Vec<&str>>();
 

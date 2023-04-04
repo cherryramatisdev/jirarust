@@ -27,10 +27,10 @@ pub fn parse_commands(cli: &Cli) {
             .unwrap();
 
             if branch_exist {
-                let branch_type = &branch_name.split("/").collect::<Vec<&str>>()[0];
-                let code = branch_name.split("-").collect::<Vec<&str>>()[1];
+                let branch_type = &branch_name.split('/').collect::<Vec<&str>>()[0];
+                let code = branch_name.split('-').collect::<Vec<&str>>()[1];
                 let code: usize = code.parse().unwrap();
-                progress_card::call(&branch_type, &code).unwrap();
+                progress_card::call(branch_type, &code).unwrap();
             } else {
                 let branch_types = vec!["feature", "fix"];
                 if let Ok(branch_type) = utils::select_widget_provider::call(branch_types) {

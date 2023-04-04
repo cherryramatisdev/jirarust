@@ -1,4 +1,5 @@
-use crate::log::{log, LogType, Message};
+use crate::error::Error;
+use crate::log::{log, LogType};
 use std::fs;
 use std::path::Path;
 
@@ -30,7 +31,7 @@ pub struct Config {
     pub git: Git,
 }
 
-pub fn call() -> Result<Config, serde_json::Error> {
+pub fn call() -> Result<Config, Error> {
     let home_dir = std::env::var("HOME").unwrap();
     let config_loc =
         std::env::var("JIRA_CONFIG_LOG").unwrap_or(format!("{}/.jira_config.json", home_dir));
@@ -38,29 +39,15 @@ pub fn call() -> Result<Config, serde_json::Error> {
     let config_path = Path::new(&config_loc);
 
     if !config_path.exists() {
-        match fs::File::create(config_path) {
-            Ok(_) => (),
-            Err(e) => {
-                log(LogType::Error, Message::Error(Box::new(e)));
-            }
-        };
+        if let Err(e) = fs::File::create(config_path) {
+            return Err(Error::IoError(e))
+        }
     }
 
-    let data = match fs::read_to_string(&config_loc) {
-        Ok(data) => data,
-        Err(e) => {
-            log(LogType::Error, Message::Error(Box::new(e)));
-
-            "".to_string()
-        }
-    };
+    let data = fs::read_to_string(&config_loc)?;
 
     match serde_json::from_str(&data) {
         Ok(config) => Ok(config),
-        Err(e) => {
-            log(LogType::Error, Message::SerdeError(&e));
-
-            Err(e)
-        }
+        Err(e) => Err(Error::SerdeError(e)),
     }
 }
