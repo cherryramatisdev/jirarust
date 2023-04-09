@@ -1,6 +1,6 @@
-use std::error;
+use crate::error::Error;
 
-pub fn call() -> Result<(), Box<dyn error::Error>> {
+pub fn call() -> Result<(), Error> {
     std::process::Command::new("gh")
         .arg("pr")
         .arg("view")

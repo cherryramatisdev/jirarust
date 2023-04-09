@@ -1,5 +1,7 @@
 use std::process;
 
+use crate::error::Error;
+
 use super::command_trait;
 
 pub struct GetBranchesCommand;
@@ -9,16 +11,13 @@ impl command_trait::Command for GetBranchesCommand {
     }
 }
 
-pub fn call(
-    cmd: &impl command_trait::Command,
-    branch_name: &str,
-) -> Result<(bool, String), Box<dyn std::error::Error>> {
+pub fn call(cmd: &impl command_trait::Command, branch_name: &str) -> Result<(bool, String), Error> {
     if let Ok(branches) = cmd.output() {
-        let branches = String::from_utf8(branches.stdout)?;
-        let branches = branches.replace("*", "");
+        let branches = String::from_utf8(branches.stdout).unwrap();
+        let branches = branches.replace('*', "");
         let branches = branches
             .trim()
-            .split("\n")
+            .split('\n')
             .map(|x| x.trim())
             .collect::<Vec<&str>>();
 
@@ -31,7 +30,7 @@ pub fn call(
     }
 
     // TODO: check this error message for a better one
-    Err(Box::new(std::io::Error::new(
+    Err(Error::IoError(std::io::Error::new(
         std::io::ErrorKind::Other,
         "Something got wrong",
     )))

@@ -1,15 +1,8 @@
-use serde_json::Error as SerdeError;
 use std::fmt::Display;
 
 pub enum LogType {
     Info,
-    Error,
-}
-
-pub enum Message<'a> {
-    Error(Box<dyn std::error::Error>),
-    SerdeError(&'a SerdeError),
-    String(String),
+    // Error,
 }
 
 impl Display for LogType {
@@ -20,25 +13,15 @@ impl Display for LogType {
                 "{}",
                 ansi_hex_color::colored("#ffffff", "#000000", "INFO")
             ),
-            LogType::Error => write!(
-                f,
-                "{}",
-                ansi_hex_color::colored("#ffffff", "#ff0000", "ERROR")
-            ),
+            // LogType::Error => write!(
+            //     f,
+            //     "{}",
+            //     ansi_hex_color::colored("#ffffff", "#ff0000", "ERROR")
+            // ),
         }
     }
 }
 
-pub fn log(log_type: LogType, message: Message) {
-    match &message {
-        Message::Error(error) => {
-            println!("{log_type} {}", error.to_string());
-        }
-        Message::SerdeError(error) => {
-            println!("{log_type} {}", error.to_string());
-        }
-        Message::String(string) => {
-            println!("{log_type} {}", string);
-        }
-    }
+pub fn log(log_type: LogType, message: &str) {
+    println!("{log_type} {message}");
 }
