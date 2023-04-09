@@ -1,7 +1,7 @@
+use crate::error::Error;
 use crate::git_api;
 use crate::jira_api::transitions::TRANSITIONS;
 use crate::log::{log, LogType};
-use crate::error::Error;
 use crate::{actions, jira_api};
 
 pub fn call(code: &usize) -> Result<bool, Error> {

@@ -39,7 +39,7 @@ pub fn call() -> Result<Config, Error> {
 
     if !config_path.exists() {
         if let Err(e) = fs::File::create(config_path) {
-            return Err(Error::IoError(e))
+            return Err(Error::IoError(e));
         }
     }
 

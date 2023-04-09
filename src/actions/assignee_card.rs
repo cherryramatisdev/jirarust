@@ -1,6 +1,6 @@
+use crate::error::Error;
 use http_auth_basic::Credentials;
 use serde::{Deserialize, Serialize};
-use crate::error::Error;
 
 use crate::config;
 

@@ -1,4 +1,4 @@
-use crate::{jira_api, utils, error::Error};
+use crate::{error::Error, jira_api, utils};
 use ansi_hex_color;
 use atty::Stream;
 use regex::Regex;

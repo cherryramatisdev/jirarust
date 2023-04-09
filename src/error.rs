@@ -7,5 +7,5 @@ pub enum Error {
     #[error("ERROR: `{0}`")]
     MinreqError(#[from] minreq::Error),
     #[error("ERROR: `{0}`")]
-    Other(String)
+    Other(String),
 }
