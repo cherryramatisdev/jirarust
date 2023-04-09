@@ -22,8 +22,9 @@ impl Command for ChangeToBranchCommand {
     fn output(&self) -> Result<std::process::Output, std::io::Error> {
         let mut cmd = std::process::Command::new("git");
         cmd.arg("checkout");
+
         if self.should_create {
-            cmd.arg("-b").arg(self.branch_name.as_str());
+            cmd.arg("-b");
         }
 
         cmd.arg(self.branch_name.as_str());
