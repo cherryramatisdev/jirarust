@@ -3,8 +3,8 @@ mod cmd;
 mod config;
 mod git_api;
 mod jira_api;
-mod log;
 mod utils;
+mod log;
 mod error;
 
 use clap::Parser;

@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::actions;
 use crate::config;
+use crate::error::Error;
 use crate::git_api;
 use crate::jira_api;
 use crate::jira_api::transitions::TRANSITIONS;
@@ -11,7 +12,7 @@ struct Transition {
     id: String,
 }
 
-pub fn call(branch_type: &str, code: &usize) -> Result<bool, Box<dyn std::error::Error>> {
+pub fn call(branch_type: &str, code: &usize) -> Result<bool, Error> {
     let config = config::config_parser::call()?;
     let (branch_exist, _) = git_api::branch_exist::call(
         &git_api::branch_exist::GetBranchesCommand,

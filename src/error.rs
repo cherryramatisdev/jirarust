@@ -1,16 +1,11 @@
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
+    #[error("ERROR: `{0}`")]
     IoError(#[from] std::io::Error),
+    #[error("ERROR: `{0}`")]
     SerdeError(#[from] serde_json::Error),
-    // Other(String),
-}
-
-impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Error::IoError(e) => write!(f, "{}", e),
-            Error::SerdeError(e) => write!(f, "{}", e),
-            // Error::Other(s) => write!(f, "{}", s),
-        }
-    }
+    #[error("ERROR: `{0}`")]
+    MinreqError(#[from] minreq::Error),
+    #[error("ERROR: `{0}`")]
+    Other(String)
 }

@@ -1,7 +1,7 @@
 use http_auth_basic::Credentials;
 use serde::Deserialize;
 
-use crate::config;
+use crate::{config, error::Error};
 
 #[derive(Deserialize)]
 struct Issue {
@@ -13,7 +13,7 @@ struct Field {
     summary: String,
 }
 
-pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
+pub fn call(code: &usize) -> Result<String, Error> {
     let config = config::config_parser::call()?;
 
     let url = format!(

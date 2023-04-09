@@ -1,6 +1,7 @@
+use crate::error::Error;
 use dialoguer::{console::Term, theme::ColorfulTheme, Select};
 
-pub fn call(items: Vec<&str>) -> Result<String, Box<dyn std::error::Error>> {
+pub fn call(items: Vec<&str>) -> Result<String, Error> {
     let selection = Select::with_theme(&ColorfulTheme::default())
         .items(&items)
         .default(0)
@@ -8,9 +9,9 @@ pub fn call(items: Vec<&str>) -> Result<String, Box<dyn std::error::Error>> {
 
     match selection {
         Some(index) => Ok(items[index].to_string()),
-        None => Err(Box::new(std::io::Error::new(
+        None => Err(std::io::Error::new(
             std::io::ErrorKind::Other,
             "No item selected",
-        )))?,
+        ))?,
     }
 }

@@ -1,5 +1,4 @@
 use crate::error::Error;
-use crate::log::{log, LogType};
 use std::fs;
 use std::path::Path;
 

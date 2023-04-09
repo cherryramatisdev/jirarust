@@ -1,9 +1,7 @@
-use crate::config;
+use crate::{config, error::Error};
 use http_auth_basic::Credentials;
 use minreq::Response;
 use serde::{Deserialize, Serialize};
-
-use std::error;
 
 #[derive(Deserialize, Serialize)]
 struct Transition {
@@ -25,7 +23,7 @@ impl TransitionBody {
     }
 }
 
-pub fn call(code: &usize, transition: &usize) -> Result<Response, Box<dyn error::Error>> {
+pub fn call(code: &usize, transition: &usize) -> Result<Response, Error> {
     let config = config::config_parser::call()?;
     let transition_body = TransitionBody::new(transition);
 
@@ -43,6 +41,6 @@ pub fn call(code: &usize, transition: &usize) -> Result<Response, Box<dyn error:
     if transition_response.status_code == 204 {
         Ok(transition_response)
     } else {
-        Err("Error while doing transition".into())
+        Err(Error::Other("Error while doing transition".to_string()))
     }
 }

@@ -1,4 +1,4 @@
-use crate::{jira_api, utils};
+use crate::{jira_api, utils, error::Error};
 use ansi_hex_color;
 use atty::Stream;
 use regex::Regex;
@@ -6,7 +6,7 @@ use regex::Regex;
 const FOREGROUND_LIGHT: &str = "#ffffff";
 const FOREGROUND_DARK: &str = "#000000";
 
-pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
+pub fn call(code: &usize) -> Result<String, Error> {
     let content = jira_api::get_card_content::call(code)?;
 
     if atty::is(Stream::Stdin) && content.contains("panel:bgColor") {

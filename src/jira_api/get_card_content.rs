@@ -1,4 +1,4 @@
-use crate::config;
+use crate::{config, error::Error};
 
 use serde::Deserialize;
 
@@ -14,7 +14,7 @@ struct Issue {
     fields: Field,
 }
 
-pub fn call(code: &usize) -> Result<String, Box<dyn std::error::Error>> {
+pub fn call(code: &usize) -> Result<String, Error> {
     let config = config::config_parser::call()?;
 
     let url = format!(

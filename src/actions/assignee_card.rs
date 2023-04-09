@@ -1,5 +1,6 @@
 use http_auth_basic::Credentials;
 use serde::{Deserialize, Serialize};
+use crate::error::Error;
 
 use crate::config;
 
@@ -17,7 +18,7 @@ impl AssigneeBody {
     }
 }
 
-pub fn call(code: &usize) -> Result<minreq::Response, Box<dyn std::error::Error>> {
+pub fn call(code: &usize) -> Result<minreq::Response, Error> {
     let config = config::config_parser::call()?;
     let assignee_body = AssigneeBody::new(&config.auth.profile_id);
 
@@ -35,6 +36,6 @@ pub fn call(code: &usize) -> Result<minreq::Response, Box<dyn std::error::Error>
     if assignee_response.status_code == 204 {
         Ok(assignee_response)
     } else {
-        Err("Can't assign card".into())
+        Err(Error::Other("Can't assign card".to_string()))
     }
 }
