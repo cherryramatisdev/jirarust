@@ -10,7 +10,7 @@ pub fn call(code: &Option<usize>) -> Result<bool, Error> {
     let base_branch = if has_develop { "develop" } else { "main" };
 
     if code.is_none() {
-        return create_pr(&base_branch.to_string(), &String::new());
+        return create_pr(&base_branch.to_string(), None);
     }
 
     let code = code.unwrap();
@@ -18,13 +18,13 @@ pub fn call(code: &Option<usize>) -> Result<bool, Error> {
     let pr_title = actions::get_pr_title::call(&code).unwrap();
 
     if transition_response.status_code == 204 {
-        return create_pr(&base_branch.to_string(), &pr_title);
+        return create_pr(&base_branch.to_string(), Some(pr_title));
     }
 
     Ok(true)
 }
 
-fn create_pr(base_branch: &String, pr_title: &String) -> Result<bool, Error> {
+fn create_pr(base_branch: &String, pr_title: Option<String>) -> Result<bool, Error> {
     let pr_exists = git_api::pr_exist::call(&git_api::pr_exist::ViewCurrentPrCommand)?;
 
     if pr_exists {
