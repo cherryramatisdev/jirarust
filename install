@@ -9,4 +9,4 @@ if [ ! -d "$SCRIPTS_DIR" ]; then
 fi
 
 cargo build --release
-mv target/release/jirarust "$SCRIPTS_DIR/jira"
+mv target/release/jirarust "$SCRIPTS_DIR/jirarust"

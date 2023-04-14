@@ -27,7 +27,7 @@ The json file should look like this:
   },
   "git": {
     "feature_tag": "<the github label you use for features>",
-    "fix_tag": "<the github label you use for bugfixes>",
+    "fix_tag": "<the github label you use for bugfixes>"
   }
 }
 ```
@@ -38,7 +38,15 @@ The json file should look like this:
 jirarust
 ```
 
-> Tip: Change the binary name to `jira` or something better for your use.
+> Tip: Alias `jirarust` to `jira` for easier usage in your config.
+
+## Shell completion
+
+Replace `zsh` with your shell of choice and the write path to where you keep the completions.
+
+```sh
+jirarust --generate=zsh > ~/.zsh/functions/_jirarust
+```
 
 ## Requirements
 

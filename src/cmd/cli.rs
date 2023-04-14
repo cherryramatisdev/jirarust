@@ -1,11 +1,15 @@
 use clap::{Parser, Subcommand};
+use clap_complete::Shell;
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version, about, long_about = None, bin_name = "jira")]
 #[command(propagate_version = true)]
 pub struct Cli {
     #[command(subcommand)]
-    pub commands: Commands,
+    pub commands: Option<Commands>,
+    // If provided, outputs the completion file for given shell
+    #[arg(long = "generate", value_enum)]
+    pub generator: Option<Shell>,
 }
 
 #[derive(Subcommand, Debug)]
@@ -24,4 +28,7 @@ pub enum Commands {
 
     /// Print card description on stdout
     View { code: usize },
+
+    #[command(name = "config_set")]
+    ConfigSet,
 }
