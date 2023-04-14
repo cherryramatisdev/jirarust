@@ -29,6 +29,6 @@ pub enum Commands {
     /// Print card description on stdout
     View { code: usize },
 
-    #[command(name = "config_set")]
+    /// Interactively generate the json config file.
     ConfigSet,
 }

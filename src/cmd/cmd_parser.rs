@@ -1,4 +1,4 @@
-use crate::actions::{get_card_content, get_card_title, get_pr_title, progress_card, review_card};
+use crate::actions::{get_card_content, get_card_title, get_pr_title, progress_card, review_card, config_set};
 use crate::log::LogType;
 use crate::{log::log, utils};
 
@@ -53,6 +53,7 @@ pub fn parse_commands(cli: &Cli) {
             }
 
             Commands::ConfigSet => {
+                config_set::call().unwrap();
             }
         }
     }
