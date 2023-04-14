@@ -2,28 +2,28 @@ use crate::error::Error;
 use std::fs;
 use std::path::Path;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Prefixes {
     pub card_prefix: String,
     pub url_prefix: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Auth {
     pub user_mail: String,
     pub user_token: String,
     pub profile_id: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Git {
     pub feature_tag: String,
     pub fix_tag: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 pub struct Config {
     pub auth: Auth,
     pub prefixes: Prefixes,
