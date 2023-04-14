@@ -1,4 +1,6 @@
-use crate::actions::{get_card_content, get_card_title, get_pr_title, progress_card, review_card, config_set};
+use crate::actions::{
+    config_set, get_card_content, get_card_title, get_pr_title, progress_card, review_card,
+};
 use crate::log::LogType;
 use crate::{log::log, utils};
 

@@ -1,12 +1,19 @@
-use std::{path::Path, fs::File};
+use std::{fs::File, path::Path};
 
-use dialoguer::{Input, Confirm};
+use dialoguer::{Confirm, Input};
 
-use crate::{config::config_parser, error::Error, log::{log, LogType}};
+use crate::{
+    config::config_parser,
+    error::Error,
+    log::{log, LogType},
+};
 
 // TODO: this is the most simpler way I can think to do this, but need improvements
 pub fn call() -> Result<(), Error> {
-    if !Confirm::new().with_prompt("This action will destroy any existing config, want to continue?").interact()? {
+    if !Confirm::new()
+        .with_prompt("This action will destroy any existing config, want to continue?")
+        .interact()?
+    {
         return Ok(());
     }
 
@@ -43,7 +50,10 @@ pub fn call() -> Result<(), Error> {
     let file = File::create(config_path)?;
     serde_json::to_writer(&file, &config)?;
 
-    log(LogType::Info, format!("Config saved to {}", config_loc).as_str());
+    log(
+        LogType::Info,
+        format!("Config saved to {}", config_loc).as_str(),
+    );
 
     Ok(())
 }

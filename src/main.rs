@@ -7,8 +7,8 @@ mod jira_api;
 mod log;
 mod utils;
 
-use clap::{Parser, Command, CommandFactory};
-use clap_complete::{Generator, generate};
+use clap::{Command, CommandFactory, Parser};
+use clap_complete::{generate, Generator};
 use cmd::{cli::Cli, cmd_parser::parse_commands};
 
 fn print_completions<G: Generator>(gen: G, cmd: &mut Command) {
