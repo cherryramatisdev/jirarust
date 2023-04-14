@@ -20,7 +20,7 @@ pub enum Commands {
     Progress { code: usize },
 
     /// Move card to review and create new pull request
-    Review { code: usize },
+    Review { code: Option<usize> },
 
     /// Print card description on stdout
     View { code: usize },
