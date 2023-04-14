@@ -11,15 +11,20 @@ pub fn call(code: &usize) -> Result<bool, Error> {
     let pr_title = actions::get_pr_title::call(code).unwrap();
 
     if transition_response.status_code == 204 {
-        let base_branch = if has_develop { "develop" } else { "main" };
+        let pr_exists = git_api::pr_exist::call(&git_api::pr_exist::ViewCurrentPrCommand)?;
 
-        let status = git_api::create_pr::call(&base_branch.to_string(), &pr_title);
+        if !pr_exists {
+            let base_branch = if has_develop { "develop" } else { "main" };
 
-        if status.success() {
+            let status = git_api::create_pr::call(&base_branch.to_string(), &pr_title);
+            if status.success() {
+                git_api::view_current_pr::call()?;
+                log(LogType::Info, format!("{}", status).as_str());
+            }
+        } else {
             git_api::view_current_pr::call()?;
+            log(LogType::Info, "PR already exists");
         }
-
-        log(LogType::Info, format!("{}", status).as_str());
     }
 
     Ok(true)
