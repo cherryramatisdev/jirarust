@@ -2,7 +2,7 @@ use std::fmt::Display;
 
 pub enum LogType {
     Info,
-    // Error,
+    Error,
 }
 
 impl Display for LogType {
@@ -13,11 +13,11 @@ impl Display for LogType {
                 "{}",
                 ansi_hex_color::colored("#ffffff", "#000000", "INFO")
             ),
-            // LogType::Error => write!(
-            //     f,
-            //     "{}",
-            //     ansi_hex_color::colored("#ffffff", "#ff0000", "ERROR")
-            // ),
+            LogType::Error => write!(
+                f,
+                "{}",
+                ansi_hex_color::colored("#ffffff", "#ff0000", "ERROR")
+            ),
         }
     }
 }
