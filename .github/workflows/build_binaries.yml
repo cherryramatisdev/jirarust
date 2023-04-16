@@ -1,0 +1,92 @@
+name: Build And Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+
+    - name: Build Windows EXE
+      run: cargo build --release --target=x86_64-pc-windows-msvc
+    - name: Archive Windows EXE
+      uses: actions/upload-artifact@v2
+      with:
+        name: jirarust_windows
+        path: target/x86_64-pc-windows-msvc/release/jirarust.exe
+
+    - name: Build Linux Bin
+      run: cargo build --release --target=x86_64-unknown-linux-gnu
+    - name: Archive Linux Bin
+      uses: actions/upload-artifact@v2
+      with:
+        name: jirarust_linux
+        path: target/x86_64-unknown-linux-gnu/release/jirarust
+
+    - name: Build macOS Intel Bin
+      run: cargo build --release --target=x86_64-apple-darwin
+    - name: Archive macOS Intel Bin
+      uses: actions/upload-artifact@v2
+      with:
+        name: jirarust_macos_intel
+        path: target/x86_64-apple-darwin/release/jirarust
+
+    - name: Set up Rust for macOS M1/M2
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+        target: aarch64-apple-darwin
+
+    - name: Build macOS M1/M2 Bin
+      run: cargo build --release --target=aarch64-apple-darwin
+    - name: Archive macOS M1/M2 Bin
+      uses: actions/upload-artifact@v2
+      with:
+        name: jirarust_macos_m1
+        path: target/aarch64-apple-darwin/release/jirarust
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_ASSET_PATHS: |
+        jirarust_windows=target/x86_64-pc-windows-msvc/release/jirarust.exe
+        jirarust_linux=target/x86_64-unknown-linux-gnu/release/jirarust
+        jirarust_macos_intel=target/x86_64-apple-darwin/release/jirarust
+        jirarust_macos_m1=target/aarch64-apple-darwin/release/jirarust
+
+    steps:
+    - name: Download Release Tool
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        user_email: my-email@example.com
+        user_api_key: ${{ secrets.HEROKU_API_KEY }}
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v1.0.0
+        release_name: Release v1.0.0
+        body: This is the first release of my project.
+        draft: false
+        prerelease: false
+    - name: Upload Release Assets
+      id: upload-release-assets
+      uses: actions/upload-release-asset@v1
+      with:
+        upload
