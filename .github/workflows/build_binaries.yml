@@ -28,21 +28,21 @@ jobs:
         name: jirarust_linux
         path: target/x86_64-unknown-linux-gnu/release/jirarust
 
-    - name: Set up Rust for macOS Intel
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
-        target: x86_64-apple-darwin
+    # - name: Set up Rust for macOS Intel
+    #   uses: actions-rs/toolchain@v1
+    #   with:
+    #     profile: minimal
+    #     toolchain: stable
+    #     override: true
+    #     target: x86_64-apple-darwin
 
-    - name: Build macOS Intel Bin
-      run: cargo build --release --target=x86_64-apple-darwin
-    - name: Archive macOS Intel Bin
-      uses: actions/upload-artifact@v2
-      with:
-        name: jirarust_macos_intel
-        path: target/x86_64-apple-darwin/release/jirarust
+    # - name: Build macOS Intel Bin
+    #   run: cargo build --release --target=x86_64-apple-darwin
+    # - name: Archive macOS Intel Bin
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: jirarust_macos_intel
+    #     path: target/x86_64-apple-darwin/release/jirarust
 
     - name: Set up Rust for macOS M1/M2
       uses: actions-rs/toolchain@v1
