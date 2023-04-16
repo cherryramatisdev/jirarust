@@ -26,6 +26,12 @@ pub enum Commands {
     /// Move card to review and create new pull request
     Review { code: Option<usize> },
 
+    /// Move card to homol
+    Homol { code: usize },
+
+    /// Move card to done
+    Done { code: usize },
+
     /// Print card description on stdout
     View { code: usize },
 
