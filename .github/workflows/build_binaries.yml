@@ -90,5 +90,5 @@ jobs:
           tag_name: ${{ steps.create_release.outputs.tag_name }}
           overwrite: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
