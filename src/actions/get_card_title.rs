@@ -1,7 +1,11 @@
 use http_auth_basic::Credentials;
 use serde::Deserialize;
 
-use crate::{config::{self, config_parser::Config}, error::Error, git_api};
+use crate::{
+    config::{self, config_parser::Config},
+    error::Error,
+    git_api,
+};
 
 #[derive(Deserialize)]
 struct Issue {
