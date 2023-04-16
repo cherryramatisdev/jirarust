@@ -71,22 +71,24 @@ jobs:
         jirarust_macos_m1=target/aarch64-apple-darwin/release/jirarust
 
     steps:
-    - name: Download Release Tool
-      uses: akhileshns/heroku-deploy@v3.12.12
-      with:
-        user_email: my-email@example.com
-        user_api_key: ${{ secrets.HEROKU_API_KEY }}
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      with:
-        tag_name: v1.0.0
-        release_name: Release v1.0.0
-        body: This is the first release of my project.
-        draft: false
-        prerelease: false
-    - name: Upload Release Assets
-      id: upload-release-assets
-      uses: actions/upload-release-asset@v1
-      with:
-        upload
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v1.0.0
+          release_name: Release v1.0.0
+          body: This is the first release of my project.
+          draft: false
+          prerelease: false
+      - name: Upload Release Assets
+        id: upload-release-assets
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.RELEASE_ASSET_PATHS }}
+          asset_name: ${{ env.RELEASE_ASSET_NAMES }}
+          tag_name: ${{ steps.create_release.outputs.tag_name }}
+          overwrite: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
