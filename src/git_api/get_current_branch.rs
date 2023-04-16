@@ -1,4 +1,6 @@
-use std::{error::Error, process::Command, process::Output};
+use std::{process::Command, process::Output};
+
+use crate::error::Error;
 
 use super::command_trait;
 
@@ -13,12 +15,13 @@ impl command_trait::Command for GetCurrentBranchCommand {
     }
 }
 
-pub fn call(cmd: &impl command_trait::Command) -> Result<String, Box<dyn Error>> {
+pub fn call(cmd: &impl command_trait::Command) -> Result<String, Error> {
     if let Ok(output) = cmd.output() {
-        let current_branch = String::from_utf8(output.stdout)?;
+        let current_branch = String::from_utf8(output.stdout).unwrap();
+        let current_branch = current_branch.trim().to_string();
 
         if current_branch.is_empty() {
-            return Err(Box::new(std::io::Error::new(
+            return Err(Error::from(std::io::Error::new(
                         std::io::ErrorKind::Other,
                         "Try to run the same command in a git repository or run `git init` in your current directory",
                         )));
@@ -28,7 +31,7 @@ pub fn call(cmd: &impl command_trait::Command) -> Result<String, Box<dyn Error>>
     }
 
     // TODO: add specific if lets to control different error cases separately.
-    Err(Box::new(std::io::Error::new(
+    Err(Error::from(std::io::Error::new(
         std::io::ErrorKind::Other,
         "Something got wrong",
     )))

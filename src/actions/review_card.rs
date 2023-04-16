@@ -14,8 +14,8 @@ pub fn call(code: &Option<usize>) -> Result<bool, Error> {
     }
 
     let code = code.unwrap();
-    let transition_response = jira_api::move_card_status::call(&code, &TRANSITIONS.review).unwrap();
-    let pr_title = actions::get_pr_title::call(&code).unwrap();
+    let transition_response = jira_api::move_card_status::call(&Some(code), &TRANSITIONS.review).unwrap();
+    let pr_title = actions::get_pr_title::call(&Some(code)).unwrap();
 
     if transition_response.status_code == 204 {
         return create_pr(&base_branch.to_string(), Some(pr_title));

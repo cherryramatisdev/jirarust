@@ -1,4 +1,4 @@
-use crate::{error::Error, jira_api, utils};
+use crate::{error::Error, git_api::get_current_jira_code, jira_api, utils};
 use ansi_hex_color;
 use atty::Stream;
 use regex::Regex;
@@ -6,8 +6,13 @@ use regex::Regex;
 const FOREGROUND_LIGHT: &str = "#ffffff";
 const FOREGROUND_DARK: &str = "#000000";
 
-pub fn call(code: &usize) -> Result<String, Error> {
-    let content = jira_api::get_card_content::call(code)?;
+pub fn call(code: &Option<usize>) -> Result<String, Error> {
+    let code = if code.is_none() {
+        get_current_jira_code::call()?
+    } else {
+        code.unwrap()
+    };
+    let content = jira_api::get_card_content::call(&code)?;
 
     if atty::is(Stream::Stdin) && content.contains("panel:bgColor") {
         let content = colorize_content(content);
