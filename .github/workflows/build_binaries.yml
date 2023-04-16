@@ -20,14 +20,6 @@ jobs:
         toolchain: stable
         override: true
 
-    - name: Build Windows EXE
-      run: cargo build --release --target=x86_64-pc-windows-msvc
-    - name: Archive Windows EXE
-      uses: actions/upload-artifact@v2
-      with:
-        name: jirarust_windows
-        path: target/x86_64-pc-windows-msvc/release/jirarust.exe
-
     - name: Build Linux Bin
       run: cargo build --release --target=x86_64-unknown-linux-gnu
     - name: Archive Linux Bin
