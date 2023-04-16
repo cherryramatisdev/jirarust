@@ -1,4 +1,4 @@
-use crate::{config, error::Error};
+use crate::{config, error::Error, git_api::get_current_jira_code};
 use http_auth_basic::Credentials;
 use minreq::Response;
 use serde::{Deserialize, Serialize};
@@ -23,9 +23,15 @@ impl TransitionBody {
     }
 }
 
-pub fn call(code: &usize, transition: &usize) -> Result<Response, Error> {
+pub fn call(code: &Option<usize>, transition: &usize) -> Result<Response, Error> {
     let config = config::config_parser::call()?;
     let transition_body = TransitionBody::new(transition);
+
+    let code = if code.is_none() {
+        get_current_jira_code::call().unwrap()
+    } else {
+        code.unwrap()
+    };
 
     let transition_response = minreq::post(format!(
         "{}/rest/api/2/issue/{}-{}/transitions",

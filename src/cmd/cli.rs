@@ -15,19 +15,25 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     /// Show title for jira card
-    Title { code: usize },
+    Title { code: Option<usize> },
 
     /// Show title for jira card using pull request title format
-    PrTitle { code: usize },
+    PrTitle { code: Option<usize> },
 
     /// Move card to progress and create new git branch
-    Progress { code: usize },
+    Progress { code: Option<usize> },
 
     /// Move card to review and create new pull request
     Review { code: Option<usize> },
 
+    /// Move card to homol
+    Homol { code: Option<usize> },
+
+    /// Move card to done
+    Done { code: Option<usize> },
+
     /// Print card description on stdout
-    View { code: usize },
+    View { code: Option<usize> },
 
     /// Interactively generate the json config file.
     ConfigSet,
