@@ -65,12 +65,8 @@ mod tests {
             ))
         });
 
-        let err = call(&mock_command)
-            .unwrap_err()
-            .downcast_ref::<std::io::Error>()
-            .unwrap()
-            .to_string();
+        let err = call(&mock_command).unwrap_err().to_string();
 
-        assert_eq!(err, "Something got wrong");
+        assert_eq!(err, "ERROR: Something got wrong");
     }
 }
