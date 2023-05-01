@@ -97,3 +97,16 @@ All notable changes to this project will be documented in this file.
 - Now all the commands can be run without the code, if
   it's run this way it'll try to get the code from the
   current checkout branch.
+
+## [0.3.8] - 2023-05-01
+
+### Added
+
+- New flag added `disable` that can disable the jira or the git part of
+`review` and `progress` command
+
+### Changed
+
+- On `review` command if you run without the code we check the current
+branch, if the current branch has a jira_code we proceed with the
+default behavior, if not we just create a new PR without any title.

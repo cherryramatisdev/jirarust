@@ -1,5 +1,5 @@
 use crate::error::Error;
-use crate::git_api;
+use crate::git_api::{self, get_current_jira_code};
 use crate::jira_api::transitions::TRANSITIONS;
 use crate::log::{log, LogType};
 use crate::{actions, jira_api};
@@ -9,11 +9,16 @@ pub fn call(code: &Option<usize>) -> Result<bool, Error> {
     let has_develop = branches.iter().any(|s| s == "develop");
     let base_branch = if has_develop { "develop" } else { "main" };
 
-    if code.is_none() {
-        return create_pr(&base_branch.to_string(), None);
-    }
+    let code = if code.is_none() {
+        if let Err(_) = get_current_jira_code::call() {
+            return create_pr(&base_branch.to_string(), None);
+        }
 
-    let code = code.unwrap();
+        get_current_jira_code::call().unwrap()
+    } else {
+        code.unwrap()
+    };
+
     let transition_response =
         jira_api::move_card_status::call(&Some(code), &TRANSITIONS.review).unwrap();
     let pr_title = actions::get_pr_title::call(&Some(code)).unwrap();
@@ -25,7 +30,7 @@ pub fn call(code: &Option<usize>) -> Result<bool, Error> {
     Ok(true)
 }
 
-fn create_pr(base_branch: &String, pr_title: Option<String>) -> Result<bool, Error> {
+pub fn create_pr(base_branch: &String, pr_title: Option<String>) -> Result<bool, Error> {
     let pr_exists = git_api::pr_exist::call(&git_api::pr_exist::ViewCurrentPrCommand)?;
 
     if pr_exists {
