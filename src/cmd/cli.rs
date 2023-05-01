@@ -10,6 +10,10 @@ pub struct Cli {
     // If provided, outputs the completion file for given shell
     #[arg(long = "generate", value_enum)]
     pub generator: Option<Shell>,
+
+    // If provided, disable either git or jira
+    #[arg(long = "disable")]
+    pub disable: Option<String>,
 }
 
 #[derive(Subcommand, Debug)]

@@ -1,5 +1,7 @@
+use std::str::FromStr;
+
 use crate::actions::{
-    config_set, get_card_content, get_card_title, get_pr_title, progress_card, review_card,
+    self, config_set, get_card_content, get_card_title, get_pr_title, progress_card, review_card,
 };
 use crate::jira_api::transitions::TRANSITIONS;
 use crate::log::LogType;
@@ -9,6 +11,23 @@ use crate::git_api::{self, get_current_jira_code};
 use crate::{config, jira_api};
 
 use super::cli::{Cli, Commands};
+
+enum Disable {
+    Jira,
+    Git,
+}
+
+impl FromStr for Disable {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "jira" => Ok(Disable::Jira),
+            "git" => Ok(Disable::Git),
+            _ => Err(format!("invalid disable: {s}")),
+        }
+    }
+}
 
 pub fn parse_commands(cli: &Cli) {
     if cli.commands.is_none() {
@@ -40,19 +59,62 @@ pub fn parse_commands(cli: &Cli) {
                 )
                 .unwrap();
 
+                if let Some(disable) = &cli.disable {
+                    match Disable::from_str(&disable).unwrap() {
+                        Disable::Jira => {
+                            let branch_type = utils::get_branch_type::call(&code);
+                            git_api::change_to_branch::call(
+                                &git_api::change_to_branch::ChangeToBranchCommand::new(
+                                    &branch_type.as_str(),
+                                    &code,
+                                    !branch_exist,
+                                ),
+                            )
+                            .unwrap();
+                        }
+                        Disable::Git => {
+                            jira_api::move_card_status::call(&Some(code), &TRANSITIONS.progress)
+                                .unwrap();
+                            actions::assignee_card::call(&code).unwrap();
+                        }
+                    }
+
+                    return;
+                }
+
                 if branch_exist {
-                    let branch_type = &branch_name.split('/').collect::<Vec<&str>>()[0];
+                    let branch_type = utils::get_branch_type::call(&code);
                     let code = branch_name.split('-').collect::<Vec<&str>>()[1];
                     let code: usize = code.parse().unwrap();
-                    progress_card::call(branch_type, &Some(code)).unwrap();
-                } else {
-                    let branch_types = vec!["feature", "fix"];
-                    if let Ok(branch_type) = utils::select_widget_provider::call(branch_types) {
-                        progress_card::call(&branch_type, &Some(code)).unwrap();
-                    }
+                    progress_card::call(&branch_type.as_str(), &Some(code)).unwrap();
+
+                    return;
                 }
+
+                let branch_type = utils::get_branch_type::call(&code);
+                progress_card::call(&branch_type, &Some(code)).unwrap();
             }
             Commands::Review { code } => {
+                if let Some(disable) = &cli.disable {
+                    match Disable::from_str(&disable).unwrap() {
+                        Disable::Git => {
+                            let code = code.unwrap();
+                            jira_api::move_card_status::call(&Some(code), &TRANSITIONS.review)
+                                .unwrap();
+                        }
+                        Disable::Jira => {
+                            let branches = git_api::list_branches::call().unwrap();
+                            let has_develop = branches.iter().any(|s| s == "develop");
+                            let base_branch = if has_develop { "develop" } else { "main" };
+
+                            actions::review_card::create_pr(&base_branch.to_string(), None)
+                                .unwrap();
+                        }
+                    }
+
+                    return;
+                }
+
                 review_card::call(code).unwrap();
             }
             Commands::Homol { code } => {
