@@ -116,3 +116,10 @@ default behavior, if not we just create a new PR without any title.
 ### Changed
 
 - Add new function to check if `develop` branch exists. It's should not change the user experience of the command, just a optimization of function.
+
+## [0.3.10] - 2023-05-22
+
+### Added
+
+- New `status` command that return the current status of the card (For example: `In review`).
+- New command `open` that open the current card in the browser (`xdg-open` as a fallback).
