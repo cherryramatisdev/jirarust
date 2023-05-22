@@ -5,8 +5,7 @@ use crate::log::{log, LogType};
 use crate::{actions, jira_api};
 
 pub fn call(code: &Option<usize>) -> Result<bool, Error> {
-    let branches = git_api::list_branches::call().unwrap();
-    let has_develop = branches.iter().any(|s| s == "develop");
+    let has_develop = git_api::has_develop::call().unwrap();
     let base_branch = if has_develop { "develop" } else { "main" };
 
     let code = if code.is_none() {
