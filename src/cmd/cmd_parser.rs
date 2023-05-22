@@ -1,7 +1,8 @@
 use std::str::FromStr;
 
 use crate::actions::{
-    self, config_set, get_card_content, get_card_title, get_pr_title, progress_card, review_card,
+    self, config_set, get_card_content, get_card_status, get_card_title, get_pr_title, open_card,
+    progress_card, review_card,
 };
 use crate::jira_api::transitions::TRANSITIONS;
 use crate::log::LogType;
@@ -131,6 +132,14 @@ pub fn parse_commands(cli: &Cli) {
 
             Commands::ConfigSet => {
                 config_set::call().unwrap();
+            }
+            Commands::Status { code } => {
+                if let Ok(status) = get_card_status::call(code) {
+                    print!("{status}");
+                };
+            }
+            Commands::Open { code } => {
+                open_card::call(code).unwrap();
             }
         }
     }

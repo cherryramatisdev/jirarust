@@ -33,7 +33,7 @@ pub fn call(code: &Option<usize>) -> Result<String, Error> {
     Ok(body.fields.summary)
 }
 
-fn mount_api_url(config: &Config, code: &Option<usize>) -> String {
+pub fn mount_api_url(config: &Config, code: &Option<usize>) -> String {
     if code.is_none() {
         let code = git_api::get_current_jira_code::call().unwrap();
         return format!(
