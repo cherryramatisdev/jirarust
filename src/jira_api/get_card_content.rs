@@ -1,18 +1,8 @@
 use crate::{config, error::Error};
 
-use serde::Deserialize;
-
 use http_auth_basic::Credentials;
 
-#[derive(Debug, Deserialize)]
-struct Field {
-    description: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct Issue {
-    fields: Field,
-}
+use super::shared_types::Issue;
 
 pub fn call(code: &usize) -> Result<String, Error> {
     let config = config::config_parser::call()?;
