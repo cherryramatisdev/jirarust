@@ -1,4 +1,5 @@
 pub mod branch_exist;
+pub mod has_develop;
 pub mod change_to_branch;
 pub mod command_trait;
 pub mod create_pr;
