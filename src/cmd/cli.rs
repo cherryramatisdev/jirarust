@@ -24,6 +24,9 @@ pub enum Commands {
     /// Show status for jira card
     Status { code: Option<usize> },
 
+    /// Open the current jira card on configured browser
+    Open { code: Option<usize> },
+
     /// Show title for jira card using pull request title format
     PrTitle { code: Option<usize> },
 
