@@ -110,3 +110,9 @@ All notable changes to this project will be documented in this file.
 - On `review` command if you run without the code we check the current
 branch, if the current branch has a jira_code we proceed with the
 default behavior, if not we just create a new PR without any title.
+
+## [0.3.9] - 2023-05-22
+
+### Changed
+
+- Add new function to check if `develop` branch exists. It's should not change the user experience of the command, just a optimization of function.
