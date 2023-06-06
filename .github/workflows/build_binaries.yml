@@ -23,10 +23,15 @@ jobs:
     - name: Build Linux Bin
       run: cargo build --release --target=x86_64-unknown-linux-gnu
     - name: Archive Linux Bin
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: jirarust_linux
         path: target/x86_64-unknown-linux-gnu/release/jirarust
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.run-number }}
+        files: target/x86_64-unknown-linux-gnu/release/jirarust
 
     # - name: Set up Rust for macOS Intel
     #   uses: actions-rs/toolchain@v1
