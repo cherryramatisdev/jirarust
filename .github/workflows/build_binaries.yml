@@ -30,7 +30,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.run-number }}
+        tag_name: ${{ github.run_number }}
         files: target/x86_64-unknown-linux-gnu/release/jirarust
 
     # - name: Set up Rust for macOS Intel
