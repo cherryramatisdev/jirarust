@@ -30,7 +30,7 @@ jirarust --generate=zsh > ~/.zsh/functions/_jirarust
 
 ## Requirements
 
-- [Github CLI](https://cli.github.com/)
+- Define environment variable `GITHUB_TOKEN` to be used in the remote related commands (e.g. review)
 
 ## Goals
 
