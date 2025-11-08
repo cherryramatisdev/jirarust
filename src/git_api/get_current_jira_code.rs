@@ -1,7 +1,4 @@
-use crate::{
-    config,
-    error::Error,
-};
+use crate::{config, error::Error};
 use regex::Regex;
 
 use super::get_current_branch;

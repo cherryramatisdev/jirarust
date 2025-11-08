@@ -2,10 +2,7 @@ use std::{fs::File, path::Path};
 
 use dialoguer::{Confirm, Input};
 
-use crate::{
-    config::config_parser,
-    error::Error,
-};
+use crate::{config::config_parser, error::Error};
 
 // TODO: this is the most simpler way I can think to do this, but need improvements
 pub fn call() -> Result<(), Error> {
