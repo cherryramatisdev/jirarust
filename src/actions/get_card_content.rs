@@ -1,10 +1,7 @@
 use crate::{error::Error, git_api::get_current_jira_code, jira_api, utils};
-use ansi_hex_color;
 use atty::Stream;
 use regex::Regex;
-
-const FOREGROUND_LIGHT: &str = "#ffffff";
-const FOREGROUND_DARK: &str = "#000000";
+use utils::colorful_print;
 
 pub fn call(code: &Option<usize>) -> Result<String, Error> {
     let code = if code.is_none() {
@@ -35,8 +32,8 @@ fn colorize_content(content: String) -> String {
         capture_group_as_str(r"\{panel:bgColor=.*?\}([\s\S]*?)\{panel\}", 1, &content);
 
     let foreground_color = match utils::color_dark_or_bright::call(&color) {
-        utils::color_dark_or_bright::ColorState::Darker => FOREGROUND_LIGHT,
-        utils::color_dark_or_bright::ColorState::Brighter => FOREGROUND_DARK,
+        utils::color_dark_or_bright::ColorState::Darker => colorful_print::Color::White,
+        utils::color_dark_or_bright::ColorState::Brighter => colorful_print::Color::Black,
     };
 
     let content = content
@@ -44,7 +41,7 @@ fn colorize_content(content: String) -> String {
         .replace("{panel}", "")
         .replace(
             box_colored.as_str(),
-            ansi_hex_color::colored(foreground_color, color.as_str(), box_colored.trim()).as_str(),
+            colorful_print::get_colorful_text(box_colored.trim(), foreground_color).as_str(),
         );
 
     content

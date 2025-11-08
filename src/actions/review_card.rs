@@ -1,7 +1,6 @@
 use crate::error::Error;
 use crate::git_api::{self, get_current_jira_code};
 use crate::jira_api::transitions::TRANSITIONS;
-use crate::log::{log, LogType};
 use crate::{actions, jira_api};
 
 pub fn call(code: &Option<usize>) -> Result<bool, Error> {
@@ -33,14 +32,14 @@ pub fn create_pr(base_branch: &String, pr_title: Option<String>) -> Result<bool,
     let pr_exists = git_api::pr_exist::call(&git_api::pr_exist::ViewCurrentPrCommand)?;
 
     if pr_exists {
-        log(LogType::Info, "PR already exists");
+        println!("[INFO] PR already exists");
         git_api::view_current_pr::call()?;
         return Ok(true);
     }
 
     let status = git_api::create_pr::call(base_branch, pr_title);
     if status.success() {
-        log(LogType::Info, format!("{}", status).as_str());
+        println!("[INFO] {}", status);
         git_api::view_current_pr::call()?;
         return Ok(true);
     }

@@ -5,8 +5,7 @@ use crate::actions::{
     progress_card, review_card,
 };
 use crate::jira_api::transitions::TRANSITIONS;
-use crate::log::LogType;
-use crate::{log::log, utils};
+use crate::utils;
 
 use crate::git_api::{self, get_current_jira_code};
 use crate::{config, jira_api};
@@ -32,7 +31,7 @@ impl FromStr for Disable {
 
 pub fn parse_commands(cli: &Cli) {
     if cli.commands.is_none() {
-        log(LogType::Error, "No command provided");
+        println!("[ERROR] No command provided");
     } else {
         let commands = cli.commands.as_ref().unwrap();
         match commands {

@@ -4,7 +4,6 @@ mod config;
 mod error;
 mod git_api;
 mod jira_api;
-mod log;
 mod utils;
 
 use clap::{Command, CommandFactory, Parser};

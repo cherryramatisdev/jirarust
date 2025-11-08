@@ -1,7 +1,6 @@
 use crate::{
     config,
     error::Error,
-    log::{log, LogType},
 };
 use regex::Regex;
 
@@ -14,10 +13,7 @@ pub fn call() -> Result<usize, Error> {
     let re = Regex::new(&re_str).unwrap();
 
     if !re.is_match(&branch) {
-        log(
-            LogType::Error,
-            &format!("Invalid branch format: {}", branch),
-        );
+        println!("[ERROR] Invalid branch format: {}", branch);
         return Err(Error::Other("Invalid branch format".to_string()));
     }
 

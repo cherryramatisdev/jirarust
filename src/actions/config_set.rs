@@ -5,7 +5,6 @@ use dialoguer::{Confirm, Input};
 use crate::{
     config::config_parser,
     error::Error,
-    log::{log, LogType},
 };
 
 // TODO: this is the most simpler way I can think to do this, but need improvements
@@ -50,10 +49,7 @@ pub fn call() -> Result<(), Error> {
     let file = File::create(config_path)?;
     serde_json::to_writer(&file, &config)?;
 
-    log(
-        LogType::Info,
-        format!("Config saved to {}", config_loc).as_str(),
-    );
+    println!("[INFO] Config saved to {}", config_loc);
 
     Ok(())
 }
