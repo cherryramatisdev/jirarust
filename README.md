@@ -34,7 +34,7 @@ jirarust --generate=zsh > ~/.zsh/functions/_jirarust
 
 ## Goals
 
-- [ ] Fix build github action to release pre built binaries for different platforms
+- [X] Fix build github action to release pre built binaries for different platforms
 - [X] Add tests
 - [X] Add documentation
 - [X] Add commands to view description of a card
