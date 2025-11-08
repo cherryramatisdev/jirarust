@@ -15,16 +15,13 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            artifact_name: jirarust_linux
-            binary_name: jirarust
+            output_name: jirarust-linux
           - os: macos-latest
             target: x86_64-apple-darwin
-            artifact_name: jirarust_macos_intel
-            binary_name: jirarust
+            output_name: jirarust-macos-intel
           - os: macos-latest
             target: aarch64-apple-darwin
-            artifact_name: jirarust_macos_apple_silicon
-            binary_name: jirarust
+            output_name: jirarust-macos-apple-silicon
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -43,8 +40,8 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.artifact_name }}
-        path: target/${{ matrix.target }}/release/${{ matrix.binary_name }}
+        name: ${{ matrix.output_name }}
+        path: target/${{ matrix.target }}/release/jirarust
 
   release:
     needs: build
@@ -56,13 +53,15 @@ jobs:
       uses: actions/download-artifact@v4
       
     - name: List files for verification
-      run: find . -type f -name "jirarust*" | head -10
+      run: |
+        ls -la
+        find . -type f -name "jirarust*" | head -10
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.run_number }}
         files: |
-          jirarust_linux/jirarust
-          jirarust_macos_intel/jirarust
-          jirarust_macos_apple_silicon/jirarust
+          jirarust-linux/jirarust
+          jirarust-macos-intel/jirarust
+          jirarust-macos-apple-silicon/jirarust
