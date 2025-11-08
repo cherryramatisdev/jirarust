@@ -10,60 +10,59 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: jirarust_linux
+            binary_name: jirarust
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact_name: jirarust_macos_intel
+            binary_name: jirarust
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact_name: jirarust_macos_apple_silicon
+            binary_name: jirarust
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Rust
-      uses: actions-rs/toolchain@v1
+      uses: dtolnay/rust-toolchain@master
       with:
-        profile: minimal
         toolchain: stable
-        override: true
+        targets: ${{ matrix.target }}
 
-    - name: Build Linux Bin
-      run: cargo build --release --target=x86_64-unknown-linux-gnu
-    - name: Archive Linux Bin
+    - name: Build Binary
+      run: cargo build --release --target=${{ matrix.target }}
+
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: jirarust_linux
-        path: target/x86_64-unknown-linux-gnu/release/jirarust
-    - name: Release
+        name: ${{ matrix.artifact_name }}
+        path: target/${{ matrix.target }}/release/${{ matrix.binary_name }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      
+    - name: List files for verification
+      run: find . -type f -name "jirarust*" | head -10
+
+    - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.run_number }}
-        files: target/x86_64-unknown-linux-gnu/release/jirarust
-
-    - name: Set up Rust for macOS Intel
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
-        target: x86_64-apple-darwin
-
-    - name: Build macOS Intel Bin
-      run: cargo build --release --target=x86_64-apple-darwin
-    - name: Archive macOS Intel Bin
-      uses: actions/upload-artifact@v4
-      with:
-        name: jirarust_macos_intel
-        path: target/x86_64-apple-darwin/release/jirarust
-
-    - name: Set up Rust for macOS M1/M2
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
-        target: aarch64-apple-darwin
-
-    - name: Build macOS M1/M2 Bin
-      run: cargo build --release --target=aarch64-apple-darwin
-    - name: Archive macOS M1/M2 Bin
-      uses: actions/upload-artifact@v4
-      with:
-        name: jirarust_macos_m1
-        path: target/aarch64-apple-darwin/release/jirarust
+        files: |
+          jirarust_linux/jirarust
+          jirarust_macos_intel/jirarust
+          jirarust_macos_apple_silicon/jirarust
