@@ -47,7 +47,7 @@ jobs:
     - name: Build macOS Intel Bin
       run: cargo build --release --target=x86_64-apple-darwin
     - name: Archive macOS Intel Bin
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: jirarust_macos_intel
         path: target/x86_64-apple-darwin/release/jirarust
@@ -63,7 +63,7 @@ jobs:
     - name: Build macOS M1/M2 Bin
       run: cargo build --release --target=aarch64-apple-darwin
     - name: Archive macOS M1/M2 Bin
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: jirarust_macos_m1
         path: target/aarch64-apple-darwin/release/jirarust
