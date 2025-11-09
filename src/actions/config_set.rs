@@ -4,7 +4,6 @@ use dialoguer::{Confirm, Input};
 
 use crate::{config::config_parser, error::Error};
 
-// TODO: this is the most simpler way I can think to do this, but need improvements
 pub fn call() -> Result<(), Error> {
     if !Confirm::new()
         .with_prompt("This action will destroy any existing config, want to continue?")
@@ -18,8 +17,7 @@ pub fn call() -> Result<(), Error> {
     let profile_id = ask("Profile ID: ")?;
     let card_prefix = ask("Prefix used on tickets/cards: ")?;
     let url_prefix = ask("URL of organization(Ex: http://something.atlassian.net): ")?;
-    let feature_tag = ask("Github label used for new features: ")?;
-    let fix_tag = ask("Github label used for new bugfixes: ")?;
+    let remote_username = ask("Your remote username(e.g. Github or Gitlab): ")?;
 
     let config = config_parser::Config {
         auth: config_parser::Auth {
@@ -31,9 +29,8 @@ pub fn call() -> Result<(), Error> {
             card_prefix,
             url_prefix,
         },
-        git: config_parser::Git {
-            feature_tag,
-            fix_tag,
+        remote: config_parser::Remote {
+            username: remote_username,
         },
     };
 

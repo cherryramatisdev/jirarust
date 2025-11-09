@@ -18,16 +18,15 @@ pub struct Auth {
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct Git {
-    pub feature_tag: String,
-    pub fix_tag: String,
+pub struct Remote {
+    pub username: String,
 }
 
 #[derive(Deserialize, Serialize)]
 pub struct Config {
     pub auth: Auth,
     pub prefixes: Prefixes,
-    pub git: Git,
+    pub remote: Remote,
 }
 
 pub fn call() -> Result<Config, Error> {
