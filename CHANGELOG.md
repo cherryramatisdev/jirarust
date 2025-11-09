@@ -1,89 +1,47 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [0.1.1] - 2023-03-16
+## [0.3.11] - 2025-11-09
 
 ### Added
 
-- Add setup guide to `README.md`
+- Documentation instruction for the new provider integration without the gh CLI
 
 ### Changed
 
-- Update checkbox goals on `README.md`
+- Now this project interact directly with the github api and promote an architecture that modularize further integrations with more providers like gitlab.
 
-## [0.1.3] - 2023-03-23
+### Removed
 
-### Changed
+- Remove config options for labels on the created PRs (this will be supported eventually in the future for all the remote providers together)
+- Remove the colorization of jira cards in order to simplify dependency tree (since the feature wasn't in the ideal state anyway)
+  - Remove colorized error messages for the same reason
 
-- Update order of arguments(the title) on the create pr action.
-
-## [0.2.0] - 2023-03-27
+## [0.3.10] - 2023-05-22
 
 ### Added
 
-- Add tests to common services(still missing a lot)
-- Add build script for easy installlation
+- New `status` command that return the current status of the card (For example: `In review`).
+- New command `open` that open the current card in the browser (`xdg-open` as a fallback).
+
+## [0.3.9] - 2023-05-22
 
 ### Changed
 
-- Fix label if statement.
-- General refactors.
+- Add new function to check if `develop` branch exists. It's should not change the user experience of the command, just a optimization of function.
 
-## [0.3.0] - 2023-03-28
+## [0.3.8] - 2023-05-01
 
 ### Added
 
-- Add possibility to configure via JSON file instead of
-  environment variables
-- Add custom log helper function
-
-## [0.3.1] - 2023-03-31
+- New flag added `disable` that can disable the jira or the git part of
+`review` and `progress` command
 
 ### Changed
 
-- Improve `progress` command to only create a new
-  branch if it doesn't already exists.
-- Documentation is now sync with the new config module
-  based on json.
-- Refactor module `create_branch` to be more
-  flexible(now it's change_to_branch with an bool to
-  create or not).
-
-## [0.3.2] - 2023-03-31
-
-### Changed
-
-- Stop asking for branch type prompt when branch already exists.
-
-## [0.3.3] - 2023-04-08
-
-### Added
-
-- Configure `thiserror` crate.
-
-### Changed
-
-- Solve error with `progress` command
-
-## [0.3.4] - 2023-04-14
-
-### Changed
-
-- Update `review` command to don't try to create a PR
-  that already exists.
-
-## [0.3.5] - 2023-04-14
-
-### Changed
-
-- Update `review` command to be run without any card code, if this happen it'll just create a pr.
-
-## [0.3.6] - 2023-04-14
-
-### Added
-
-- Add new command `config-set` to interactively generate a new configuration file.
-- Add flag `--generate` to create shell completion scripts.
+- On `review` command if you run without the code we check the current
+branch, if the current branch has a jira_code we proceed with the
+default behavior, if not we just create a PR without any title.
 
 ## [0.3.7] - 2023-04-15
 
@@ -98,28 +56,86 @@ All notable changes to this project will be documented in this file.
   it's run this way it'll try to get the code from the
   current checkout branch.
 
-## [0.3.8] - 2023-05-01
+## [0.3.6] - 2023-04-14
 
 ### Added
 
-- New flag added `disable` that can disable the jira or the git part of
-`review` and `progress` command
+- Add new command `config-set` to interactively generate a new configuration file.
+- Add flag `--generate` to create shell completion scripts.
+
+## [0.3.5] - 2023-04-14
 
 ### Changed
 
-- On `review` command if you run without the code we check the current
-branch, if the current branch has a jira_code we proceed with the
-default behavior, if not we just create a new PR without any title.
+- Update `review` command to be run without any card code, if this happen it'll just create a pr.
 
-## [0.3.9] - 2023-05-22
+## [0.3.4] - 2023-04-14
 
 ### Changed
 
-- Add new function to check if `develop` branch exists. It's should not change the user experience of the command, just a optimization of function.
+- Update `review` command to don't try to create a PR
+  that already exists.
 
-## [0.3.10] - 2023-05-22
+## [0.3.3] - 2023-04-08
 
 ### Added
 
-- New `status` command that return the current status of the card (For example: `In review`).
-- New command `open` that open the current card in the browser (`xdg-open` as a fallback).
+- Configure `thiserror` crate.
+
+### Changed
+
+- Solve error with `progress` command
+
+## [0.3.2] - 2023-03-31
+
+### Changed
+
+- Stop asking for branch type prompt when branch already exists.
+
+## [0.3.1] - 2023-03-31
+
+### Changed
+
+- Improve `progress` command to only create a new
+  branch if it doesn't already exists.
+- Documentation is now sync with the new config module
+  based on json.
+- Refactor module `create_branch` to be more
+  flexible(now it's change_to_branch with an bool to
+  create or not).
+
+## [0.3.0] - 2023-03-28
+
+### Added
+
+- Add possibility to configure via JSON file instead of
+  environment variables
+- Add custom log helper function
+
+## [0.2.0] - 2023-03-27
+
+### Added
+
+- Add tests to common services(still missing a lot)
+- Add build script for easy installlation
+
+### Changed
+
+- Fix label if statement.
+- General refactors.
+
+## [0.1.3] - 2023-03-23
+
+### Changed
+
+- Update order of arguments(the title) on the create pr action.
+
+## [0.1.1] - 2023-03-16
+
+### Added
+
+- Add setup guide to `README.md`
+
+### Changed
+
+- Update checkbox goals on `README.md`
