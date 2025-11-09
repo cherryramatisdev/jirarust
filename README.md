@@ -2,6 +2,15 @@
 
 A cli that group jira and github together in a beatiful workflow 🦄.
 
+## Requirements
+
+- This CLI interact direrctly with multiple remote providers (gitlab and github for now) and for that it's necessary to define your personal usage token with proper access to generate pull/merge request
+  - For that please define either `GITHUB_TOKEN` or `gitlab_token` as environment variables in your system and make sure the token has the proper accesses
+
+> Documentation about tokens on github: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+>
+> Documentation about tokens on gitlab: https://docs.gitlab.com/user/profile/personal_access_tokens/
+
 ## Usage
 
 1. To install (In the future we'll have releases with pre built binaries)
@@ -27,10 +36,6 @@ Replace `zsh` with your shell of choice and the write path to where you keep the
 ```sh
 jirarust --generate=zsh > ~/.zsh/functions/_jirarust
 ```
-
-## Requirements
-
-- Define environment variable `GITHUB_TOKEN` to be used in the remote related commands (e.g. review)
 
 ## Goals
 
