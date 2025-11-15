@@ -5,7 +5,7 @@ use super::get_current_branch;
 
 pub fn call() -> Result<usize, Error> {
     let config = config::config_parser::call()?;
-    let branch = get_current_branch::call(&get_current_branch::GetCurrentBranchCommand)?;
+    let branch = get_current_branch::call()?;
     let re_str = format!(r"^\w+/{}-(\d+)$", config.prefixes.card_prefix);
     let re = Regex::new(&re_str).unwrap();
 

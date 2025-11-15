@@ -21,7 +21,6 @@ pub fn call(branch_type: &str, code: &Option<usize>) -> Result<bool, Error> {
         code.unwrap()
     };
     let (branch_exist, _) = git_api::branch_exist::call(
-        &git_api::branch_exist::GetBranchesCommand,
         format!("{}/{}-{}", branch_type, config.prefixes.card_prefix, code).as_str(),
     )?;
 
@@ -29,9 +28,11 @@ pub fn call(branch_type: &str, code: &Option<usize>) -> Result<bool, Error> {
 
     let assignee_response = actions::assignee_card::call(&code).unwrap();
 
-    let branch_response = git_api::change_to_branch::call(
-        &git_api::change_to_branch::ChangeToBranchCommand::new(branch_type, &code, !branch_exist),
-    )
+    let branch_response = git_api::change_to_branch::call(git_api::change_to_branch::Branch {
+        kind: branch_type.to_owned(),
+        slug: code,
+        should_create: !branch_exist,
+    })
     .unwrap();
 
     Ok(transition_response.status_code == 200

@@ -53,23 +53,21 @@ pub fn parse_commands(cli: &Cli) {
                 };
 
                 let config = config::config_parser::call().unwrap();
-                let (branch_exist, branch_name) = git_api::branch_exist::call(
-                    &git_api::branch_exist::GetBranchesCommand,
-                    &format!("{}-{}", config.prefixes.card_prefix, code),
-                )
+                let (branch_exist, branch_name) = git_api::branch_exist::call(&format!(
+                    "{}-{}",
+                    config.prefixes.card_prefix, code
+                ))
                 .unwrap();
 
                 if let Some(disable) = &cli.disable {
                     match Disable::from_str(&disable).unwrap() {
                         Disable::Jira => {
                             let branch_type = utils::get_branch_type::call(&code);
-                            git_api::change_to_branch::call(
-                                &git_api::change_to_branch::ChangeToBranchCommand::new(
-                                    &branch_type.as_str(),
-                                    &code,
-                                    !branch_exist,
-                                ),
-                            )
+                            git_api::change_to_branch::call(git_api::change_to_branch::Branch {
+                                kind: branch_type,
+                                slug: code,
+                                should_create: !branch_exist,
+                            })
                             .unwrap();
                         }
                         Disable::Git => {

@@ -12,7 +12,7 @@ impl RemoteActions for GithubRemote {
         payload: ReviewRequestPayload,
     ) -> Result<ReviewRequestResponse, Error> {
         let config = config::config_parser::call()?;
-        let repo_name = get_current_repo_name::call(&get_current_repo_name::GetCurrentRepoName)?;
+        let repo_name = get_current_repo_name::call()?;
         let url = format!(
             "https://api.github.com/repos/{}/{}/pulls",
             config.remote.username, repo_name
@@ -42,7 +42,7 @@ impl RemoteActions for GithubRemote {
 
     fn assignee_review_request(&self, id: usize) -> Result<ReviewRequestResponse, Error> {
         let config = config::config_parser::call()?;
-        let repo_name = get_current_repo_name::call(&get_current_repo_name::GetCurrentRepoName)?;
+        let repo_name = get_current_repo_name::call()?;
         let url = format!(
             "https://api.github.com/repos/{}/{}/issues/{}/assignees",
             config.remote.username, repo_name, id
@@ -78,7 +78,7 @@ impl RemoteActions for GithubRemote {
         head_branch: String,
     ) -> Result<Option<ReviewRequestResponse>, Error> {
         let config = config::config_parser::call()?;
-        let repo_name = get_current_repo_name::call(&get_current_repo_name::GetCurrentRepoName)?;
+        let repo_name = get_current_repo_name::call()?;
         let url = format!(
             "https://api.github.com/repos/{}/{}/pulls?head={}",
             config.remote.username, repo_name, head_branch

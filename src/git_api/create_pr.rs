@@ -8,9 +8,7 @@ pub fn call(
     body: Option<String>,
     remote_client: &impl remote_actions::RemoteActions,
 ) -> Result<remote_actions::ReviewRequestResponse, Error> {
-    let current_branch =
-        git_api::get_current_branch::call(&git_api::get_current_branch::GetCurrentBranchCommand)
-            .unwrap();
+    let current_branch = git_api::get_current_branch::call().unwrap();
 
     let review_request =
         remote_client.create_review_request(remote_actions::ReviewRequestPayload {

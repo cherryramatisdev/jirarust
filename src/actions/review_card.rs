@@ -33,7 +33,9 @@ pub fn create_pr(base_branch: &String, pr_title: Option<String>) -> Result<bool,
 
     if review_request.is_some() {
         println!("[INFO] PR already exists");
-        std::process::Command::new("open").arg(review_request.unwrap().url).status()?;
+        std::process::Command::new("open")
+            .arg(review_request.unwrap().url)
+            .status()?;
         return Ok(true);
     }
 
@@ -46,7 +48,9 @@ pub fn create_pr(base_branch: &String, pr_title: Option<String>) -> Result<bool,
     );
     if let Ok(request) = created_review_request {
         println!("[INFO] PR created successfully");
-        std::process::Command::new("open").arg(request.url).status()?;
+        std::process::Command::new("open")
+            .arg(request.url)
+            .status()?;
         return Ok(true);
     }
 

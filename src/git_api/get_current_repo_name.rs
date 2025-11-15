@@ -1,21 +1,9 @@
 use crate::error::Error;
 use std::process;
 
-use super::command_trait;
-
-pub struct GetCurrentRepoName;
-impl command_trait::Command for GetCurrentRepoName {
-    fn output(&self) -> Result<process::Output, std::io::Error> {
-        process::Command::new("git")
-            .arg("remote")
-            .arg("show")
-            .arg("-n")
-            .arg("origin")
-            .output()
-    }
-}
-
-pub fn call<C: command_trait::Command>(cmd: &C) -> Result<String, Error> {
+pub fn call() -> Result<String, Error> {
+    let mut cmd = process::Command::new("git");
+    cmd.arg("remote").arg("show").arg("-n").arg("origin");
     let repo = cmd.output()?;
     let repo_info = String::from_utf8(repo.stdout).unwrap();
 
