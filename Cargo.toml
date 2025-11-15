@@ -6,7 +6,7 @@ homepage = "https://github.com/cherryramatisdev/jirarust"
 license = "MIT/Apache-2.0"
 name = "jirarust"
 repository = "https://github.com/cherryramatisdev/jirarust"
-version = "0.3.10"
+version = "0.3.11"
 edition = '2021'
 
 [dependencies]
@@ -17,6 +17,5 @@ minreq = { version = "2.6.0", features = ["punycode", "https", "json-using-serde
 regex = "1.7.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-mockall = "0.11.3"
 thiserror = "1.0.40"
 clap_complete = "4.2.0"

@@ -1,46 +1,22 @@
-use crate::config;
+use crate::error::Error;
 use crate::git_api;
-use std::process::ExitStatus;
-use std::process::Stdio;
+use crate::git_api::remote_actions;
 
-pub fn call(base_branch: &String, pr_title: Option<String>) -> ExitStatus {
-    let reviewers = std::env::var("REVIEWERS").unwrap();
-    let mut cmd = std::process::Command::new("gh");
+pub fn call(
+    base_branch: &String,
+    pr_title: Option<String>,
+    body: Option<String>,
+    remote_client: &impl remote_actions::RemoteActions,
+) -> Result<remote_actions::ReviewRequestResponse, Error> {
+    let current_branch = git_api::get_current_branch::call().unwrap();
 
-    let current_branch =
-        git_api::get_current_branch::call(&git_api::get_current_branch::GetCurrentBranchCommand)
-            .unwrap();
+    let review_request =
+        remote_client.create_review_request(remote_actions::ReviewRequestPayload {
+            title: pr_title.unwrap_or(format!("Review: {} -> {}", current_branch, base_branch)),
+            body: body.unwrap_or(String::from("n/a")),
+            base: base_branch.to_string(),
+            head: current_branch,
+        })?;
 
-    let branch_type = current_branch.split('/').collect::<Vec<&str>>()[0];
-
-    let cmd = cmd
-        .arg("pr")
-        .arg("-a")
-        .arg("@me")
-        .arg("create")
-        .arg("-B")
-        .arg(base_branch)
-        .arg("-r")
-        .arg(reviewers);
-
-    if pr_title.is_some() {
-        cmd.arg("-t").arg(pr_title.unwrap());
-    }
-
-    cmd.arg("-l").arg(get_label_per_branch_type(branch_type));
-
-    cmd.stdin(Stdio::inherit());
-    cmd.stdout(Stdio::inherit());
-    cmd.stderr(Stdio::inherit());
-
-    cmd.status().expect("Failed to execute command")
-}
-
-fn get_label_per_branch_type(branch_type: &str) -> String {
-    let config = config::config_parser::call().unwrap();
-    match branch_type {
-        "feature" => config.git.feature_tag,
-        "fix" => config.git.fix_tag,
-        _ => "".to_string(),
-    }
+    remote_client.assignee_review_request(review_request.id)
 }

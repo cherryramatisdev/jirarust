@@ -2,16 +2,9 @@ use std::process;
 
 use crate::error::Error;
 
-use super::command_trait;
-
-pub struct GetBranchesCommand;
-impl command_trait::Command for GetBranchesCommand {
-    fn output(&self) -> Result<process::Output, std::io::Error> {
-        process::Command::new("git").arg("branch").output()
-    }
-}
-
-pub fn call(cmd: &impl command_trait::Command, branch_name: &str) -> Result<(bool, String), Error> {
+pub fn call(branch_name: &str) -> Result<(bool, String), Error> {
+    let mut cmd = process::Command::new("git");
+    cmd.arg("branch");
     if let Ok(branches) = cmd.output() {
         let branches = String::from_utf8(branches.stdout).unwrap();
         let branches = branches.replace('*', "");

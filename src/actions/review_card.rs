@@ -1,5 +1,5 @@
 use crate::error::Error;
-use crate::git_api::{self, get_current_jira_code};
+use crate::git_api::{self, get_current_jira_code, github};
 use crate::jira_api::transitions::TRANSITIONS;
 use crate::{actions, jira_api};
 
@@ -29,18 +29,28 @@ pub fn call(code: &Option<usize>) -> Result<bool, Error> {
 }
 
 pub fn create_pr(base_branch: &String, pr_title: Option<String>) -> Result<bool, Error> {
-    let pr_exists = git_api::pr_exist::call(&git_api::pr_exist::ViewCurrentPrCommand)?;
+    let review_request = git_api::pr_exist::call(&git_api::github::GithubRemote)?;
 
-    if pr_exists {
+    if review_request.is_some() {
         println!("[INFO] PR already exists");
-        git_api::view_current_pr::call()?;
+        std::process::Command::new("open")
+            .arg(review_request.unwrap().url)
+            .status()?;
         return Ok(true);
     }
 
-    let status = git_api::create_pr::call(base_branch, pr_title);
-    if status.success() {
-        println!("[INFO] {}", status);
-        git_api::view_current_pr::call()?;
+    // TODO(@cherry): Add proper support to body here, we'll need to open the EDITOR and capture it's output (like how git commit works).
+    let created_review_request = git_api::create_pr::call(
+        base_branch,
+        pr_title,
+        Some(String::from("test body for mr")),
+        &github::GithubRemote,
+    );
+    if let Ok(request) = created_review_request {
+        println!("[INFO] PR created successfully");
+        std::process::Command::new("open")
+            .arg(request.url)
+            .status()?;
         return Ok(true);
     }
 
